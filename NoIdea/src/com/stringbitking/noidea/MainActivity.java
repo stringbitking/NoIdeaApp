@@ -16,15 +16,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 public class MainActivity extends Activity {
 
+	public static final String CATEGORY_ID = "com.stringbitking.noidea.suggestion_id";
+	
 	private static String categoriesUrl = "http://10.0.3.2:3000/categorieslist";
 	
 	private List<String> categoryVerbs;
@@ -41,7 +45,6 @@ public class MainActivity extends Activity {
     private void loadCategories() {
 
     	Spinner spinner = (Spinner) findViewById(R.id.categoriesSpinner);
-//		String[] spinnerArray = new String[] { "One", "Two", "Three" };
 		ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, 
 								android.R.layout.simple_spinner_dropdown_item, categoryVerbs);
 		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -53,25 +56,20 @@ public class MainActivity extends Activity {
 
 		protected String doInBackground(String... arg0) {
 
-			// HTTP Client that supports streaming uploads and downloads
 			DefaultHttpClient httpclient = new DefaultHttpClient(new BasicHttpParams());
 			
-			// Define that I want to use the POST method to grab data from
-			// the provided URL
 			HttpGet httppost = new HttpGet(categoriesUrl);
 			
-			// Web service used is defined
 			httppost.setHeader("Content-type", "application/json");
 
 			// Used to read data from the URL
 			InputStream inputStream = null;
 			
-			// Will hold the whole all the data gathered from the URL
+			// Will hold all the data gathered from the URL
 			String result = null;
 
 			try {
 				
-				// Get a response if any from the web service
 				HttpResponse response = httpclient.execute(httppost);        
 				
 				// The content from the requested URL along with headers, etc.
@@ -89,7 +87,6 @@ public class MainActivity extends Activity {
 
 				String line = null;
 				
-				// Read in the data from the Buffer untilnothing is left
 				while ((line = reader.readLine()) != null)
 				{
 					
@@ -108,9 +105,11 @@ public class MainActivity extends Activity {
 				// Close the InputStream when you're done with it
 				try{if(inputStream != null)inputStream.close();}
 				catch(Exception e){}
+				
 			}
 
 			try {
+				
 				JSONArray arrResult = new JSONArray(result);
 				
 				categoryVerbs = new ArrayList<String>();
@@ -121,12 +120,15 @@ public class MainActivity extends Activity {
 					JSONObject category = arrResult.getJSONObject(i);
 					Log.e("INFO", category.getString("name"));
 					categoryVerbs.add(category.getString("verb"));
+					
 				}
 				
 
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
+			} 
+			catch (JSONException e) {
+
 				e.printStackTrace();
+				
 			}
 
 			return result;
@@ -139,6 +141,16 @@ public class MainActivity extends Activity {
 
 		}
 
+	}
+	
+	public void onClickTellMe(View view) {
+		
+		Intent newIntent = new Intent(this, SuggestionsListActivity.class);
+
+		newIntent.putExtra(CATEGORY_ID, 1);
+
+		startActivity(newIntent);
+		
 	}
 
     @Override

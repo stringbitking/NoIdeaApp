@@ -24,6 +24,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name="com.stringbitking.noidea.SuggestionsListActivity"
+            android:label="@string/app_name" >
+        </activity>
+        
+        <activity
+            android:name="com.stringbitking.noidea.SuggestionViewPager"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>

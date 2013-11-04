@@ -6,5 +6,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="app_greeting">Hey App,</string>
     <string name="app_question_start">"What do i "</string>
+    <string name="tell_me_button">Tell me</string>
+    <string name="fragment_suggestion_list_title">Suggestions List</string>
 
 </resources>

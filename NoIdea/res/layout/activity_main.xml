@@ -44,4 +44,28 @@
 
     </TableRow>
 
+    <TableRow
+        android:id="@+id/tableRow3"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/text_row_middle_height"
+        android:layout_marginBottom="@dimen/text_row_vertical_margin" >
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow4"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/text_row_vertical_margin" >
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/tell_me_button"
+            android:onClick="onClickTellMe" />
+
+    </TableRow>
+
 </TableLayout>

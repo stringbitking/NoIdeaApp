@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+        Used to define the resource id for your
+	    ViewPager. The FragmentManager requires all
+	    views used as a Fragment container to have
+	    an id
+    -->
+
+    <item name="viewPager" type="id"/>
+
+</resources>
