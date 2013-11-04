@@ -1,7 +1,6 @@
 package com.stringbitking.noidea;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.content.Context;
 
@@ -18,24 +17,6 @@ public class CurrentSuggestions {
 		this.applicationContext = applicationContext;
 
 		suggestionsList = new ArrayList<Suggestion>();
-
-		Suggestion movie1 = new Suggestion();
-		movie1.setCategory("Movies");
-		movie1.setTitle("Matrix");
-		movie1.setDescription("Mr. Anderson vs the world!");
-		suggestionsList.add(movie1);
-
-		Suggestion movie2 = new Suggestion();
-		movie2.setCategory("Movies");
-		movie2.setTitle("Thor");
-		movie2.setDescription("The god Thor has come to Earth.");
-		suggestionsList.add(movie2);
-
-		Suggestion movie3 = new Suggestion();
-		movie3.setCategory("Movies");
-		movie3.setTitle("Iron Man");
-		movie3.setDescription("Mr. Tony Stark in yet another thrilling movie from the series.");
-		suggestionsList.add(movie3);
 
 	}
 
@@ -58,11 +39,11 @@ public class CurrentSuggestions {
 
 	}
 
-	public Suggestion getSuggestion(UUID id) {
+	public Suggestion getSuggestion(String id) {
 
 		for (Suggestion theSuggestions : suggestionsList) {
 
-			if (theSuggestions.getIdNumber().equals(id)) {
+			if (theSuggestions.getId().equals(id)) {
 
 				return theSuggestions;
 
@@ -73,5 +54,12 @@ public class CurrentSuggestions {
 		return null;
 
 	}
+
+	public void update(ArrayList<Suggestion> suggestionsListNew) {
+
+		this.suggestionsList = suggestionsListNew;
+		
+	}
+
 
 }

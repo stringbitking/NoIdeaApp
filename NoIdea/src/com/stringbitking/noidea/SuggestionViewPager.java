@@ -1,7 +1,6 @@
 package com.stringbitking.noidea;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -49,7 +48,7 @@ public class SuggestionViewPager extends FragmentActivity {
 				// number from the current Suggestion
 				
 				SuggestionFragment result = (SuggestionFragment) SuggestionFragment
-									.newSuggestionFragment(theSuggestion.getIdNumber());
+									.newSuggestionFragment(theSuggestion.getId());
 				
 				return result;
 
@@ -64,7 +63,7 @@ public class SuggestionViewPager extends FragmentActivity {
 
 		});
 		
-		UUID contactId = (UUID) getIntent().getSerializableExtra(
+		String suggestionId = (String) getIntent().getSerializableExtra(
 				SuggestionFragment.SUGGESTION_ID);
 
 		// Cycle through the Suggestions in the ArrayList to find a match
@@ -72,7 +71,7 @@ public class SuggestionViewPager extends FragmentActivity {
 
 		for (int i = 0; i < suggestionsList.size(); i++) {
 
-			if (suggestionsList.get(i).getIdNumber().equals(contactId)) {
+			if (suggestionsList.get(i).getId().equals(suggestionId)) {
 
 				theViewPager.setCurrentItem(i);
 				break;

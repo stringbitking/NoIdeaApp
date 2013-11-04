@@ -1,7 +1,5 @@
 package com.stringbitking.noidea;
 
-import java.util.UUID;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,13 +16,13 @@ public class SuggestionFragment extends Fragment {
 	private TextView fragmentSuggestionTitleTextView;
 	private TextView fragmentSuggestionDescriptionTextView;
 	
-	public static SuggestionFragment newSuggestionFragment(UUID suggestionId) {
+	public static SuggestionFragment newSuggestionFragment(String suggestionId) {
 
 		// A Bundle is used to pass data between Activities
 
 		Bundle passedData = new Bundle();
 
-		// Put the Contacts ID in the Bundle
+		// Put the Suggestion ID in the Bundle
 
 		passedData.putSerializable(SUGGESTION_ID, suggestionId);
 
@@ -40,10 +38,7 @@ public class SuggestionFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// NEW Replace contact = new Contact();
-		// Get the value from CONTACT_ID that was passed in
-
-		UUID suggestionId = (UUID) getArguments().getSerializable(SUGGESTION_ID);
+		String suggestionId = (String) getArguments().getSerializable(SUGGESTION_ID);
 
 		// Get the Contact with the matching ID
 

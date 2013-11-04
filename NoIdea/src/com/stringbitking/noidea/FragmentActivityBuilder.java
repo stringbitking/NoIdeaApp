@@ -34,13 +34,7 @@ public abstract class FragmentActivityBuilder extends FragmentActivity {
 
 		if (theFragment == null) {
 
-			// If the Fragment wasn't found then we must create it
-
-			// NEW We can generate many types of Fragments by having
-			// CreateFragment define the type. So
-			// theFragment = new ContactFragment();
-			// is replaced by
-
+			// If the Fragment wasn't found then create it
 			theFragment = createFragment();
 
 			// Creates and commits the Fragment transaction

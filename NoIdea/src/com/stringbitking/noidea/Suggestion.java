@@ -1,18 +1,13 @@
 package com.stringbitking.noidea;
 
-import java.util.UUID;
-
 public class Suggestion {
 
+	private String id;
 	private String category;
 	private String title;
 	private String description;
 	
-	private UUID idNumber;
-	
 	public Suggestion() {
-		
-		idNumber = UUID.randomUUID();
 		
 	}
 
@@ -40,8 +35,14 @@ public class Suggestion {
 		this.description = description;
 	}
 
-	public UUID getIdNumber() {
-		return idNumber;
+	public String getId() {
+		return id;
 	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	
 	
 }
