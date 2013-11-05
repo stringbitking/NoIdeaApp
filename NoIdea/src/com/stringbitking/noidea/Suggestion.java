@@ -6,6 +6,7 @@ public class Suggestion {
 	private String category;
 	private String title;
 	private String description;
+	private String image;
 	
 	public Suggestion() {
 		
@@ -41,6 +42,14 @@ public class Suggestion {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	

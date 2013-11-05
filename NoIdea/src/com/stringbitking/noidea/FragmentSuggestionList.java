@@ -1,8 +1,11 @@
 package com.stringbitking.noidea;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,18 +19,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.textservice.SuggestionsInfo;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class FragmentSuggestionList extends ListFragment {
 
 	private List<Suggestion> suggestionsList;
+	private List<Drawable> suggestionImages;
 
 	private static String suggestionsUrl = "http://10.0.3.2:3000/suggestions/";
 	private String categoryId;
@@ -37,12 +46,11 @@ public class FragmentSuggestionList extends ListFragment {
 		super.onCreate(savedInstanceState);
 
 		getActivity().setTitle(R.string.fragment_suggestion_list_title);
-		
+
 		categoryId = (String) getActivity().getIntent().getSerializableExtra(
 				MainActivity.CATEGORY_ID);
-		
-		new GetSuggestionsJSON()
-				.execute();
+
+		new GetSuggestionsJSON().execute();
 
 		// Setting up the adapter after executing the async operation
 
@@ -74,13 +82,6 @@ public class FragmentSuggestionList extends ListFragment {
 		startActivity(newIntent);
 
 		// END OF NEW
-
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		((SuggestionsAdapter) getListAdapter()).notifyDataSetChanged();
 
 	}
 
@@ -122,10 +123,75 @@ public class FragmentSuggestionList extends ListFragment {
 			suggestionsDescriptionTextView.setText(theSuggestion
 					.getDescription());
 
-			// Return the finished list item for display
+			ImageView suggestionImageView = (ImageView) convertView
+					.findViewById(R.id.suggestionImageView);
+			
+			suggestionImageView.setImageDrawable(suggestionImages.get(position));
+			
 
+			// Return the finished list item for display
+			
 			return convertView;
 
+		}
+
+	}
+
+	public static Drawable LoadImageFromWebOperations(String url) {
+
+		try {
+			
+			InputStream is = (InputStream) new URL(url).getContent();
+			Drawable d = Drawable.createFromStream(is, "src name");
+			return d;
+			
+		} catch (Exception e) {
+			
+			return null;
+			
+		}
+
+	}
+
+	private class LoadSuggestionImages extends AsyncTask<String, String, String> {
+
+		protected String doInBackground(String... params) {
+			
+			suggestionImages = new ArrayList<Drawable>();
+			String imagesUrl = "http://10.0.3.2:3000/images/";
+
+			for(int i = 0; i < suggestionsList.size(); i++) {
+				
+				String currentImgUrl = imagesUrl + suggestionsList.get(i).getImage();
+				Drawable drawableImage = LoadImageFromWebOperations(currentImgUrl);
+				suggestionImages.add(drawableImage);
+				
+			}
+
+//			String imageUrl = "http://10.0.3.2:3000/images/"
+//					+ theSuggestion.getImage();
+			// Drawable drawableImage = LoadImageFromWebOperations(imageUrl);
+			// suggestionImageView.setImageDrawable(drawableImage);
+
+//			try {
+//				Bitmap bitmap = BitmapFactory
+//						.decodeStream((InputStream) new URL(imageUrl)
+//								.getContent());
+//				suggestionImageView.setImageBitmap(bitmap);
+//			} catch (MalformedURLException e) {
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+
+			return "";
+
+		}
+
+		protected void onPostExecute(String result) {
+
+			setAdapter();
+			
 		}
 
 	}
@@ -204,13 +270,6 @@ public class FragmentSuggestionList extends ListFragment {
 				for (int i = 0; i < arrResult.length(); i++) {
 
 					JSONObject suggestionJSON = arrResult.getJSONObject(i);
-					// categoryVerbs.add(categoryJSON.getString("verb"));
-					//
-					// Category cat = new Category();
-					// cat.setId(categoryJSON.getString("_id"));
-					// cat.setName(categoryJSON.getString("name"));
-					// cat.setVerb(categoryJSON.getString("verb"));
-					// categories.add(cat);
 
 					Suggestion currentSuggestion = new Suggestion();
 					currentSuggestion.setId(suggestionJSON.getString("_id"));
@@ -220,6 +279,8 @@ public class FragmentSuggestionList extends ListFragment {
 							.getString("description"));
 					currentSuggestion.setTitle(suggestionJSON
 							.getString("title"));
+					currentSuggestion.setImage(suggestionJSON
+							.getString("image"));
 					suggestionsList.add(currentSuggestion);
 
 				}
@@ -230,11 +291,12 @@ public class FragmentSuggestionList extends ListFragment {
 
 			}
 
-			// loadCategories();
 			CurrentSuggestions cg = CurrentSuggestions.get(getActivity());
 			cg.update((ArrayList<Suggestion>) suggestionsList);
 			
-			setAdapter();
+			new LoadSuggestionImages().execute();
+
+			
 
 		}
 

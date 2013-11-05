@@ -27,16 +27,18 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int LinearLayout1=0x7f05000e;
         public static final int TableLayout1=0x7f050001;
-        public static final int action_settings=0x7f050011;
+        public static final int TableLayout2=0x7f05000e;
+        public static final int TableLayout3=0x7f050010;
+        public static final int action_settings=0x7f050013;
         public static final int button1=0x7f05000a;
         public static final int categoriesSpinner=0x7f050006;
         public static final int fragmentContainer=0x7f05000b;
         public static final int fragmentSuggestionDescriptionTextView=0x7f05000d;
         public static final int fragmentSuggestionTitleTextView=0x7f05000c;
-        public static final int suggestionDescriptionTextView=0x7f050010;
-        public static final int suggestionTitleTextView=0x7f05000f;
+        public static final int suggestionDescriptionTextView=0x7f050011;
+        public static final int suggestionImageView=0x7f05000f;
+        public static final int suggestionTitleTextView=0x7f050012;
         public static final int tableRow1=0x7f050002;
         public static final int tableRow2=0x7f050004;
         public static final int tableRow3=0x7f050008;
