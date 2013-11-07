@@ -178,14 +178,6 @@ public class MainActivity extends Activity {
 
 	}
 	
-	public void onClickPostSuggestion(View view) {
-
-		Intent newIntent = new Intent(this, PostSuggestionActivity.class);
-
-		startActivity(newIntent);
-
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

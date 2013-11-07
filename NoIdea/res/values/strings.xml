@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">NoIdea</string>
+    <string name="app_id">233936543368280</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="app_greeting">Hey App,</string>
@@ -10,5 +11,6 @@
     <string name="fragment_suggestion_list_title">Suggestions List</string>
     <string name="app_question_end">now?</string>
     <string name="title_activity_post_suggestion">PostSuggestionActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
 
 </resources>

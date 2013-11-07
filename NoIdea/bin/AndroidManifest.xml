@@ -19,11 +19,7 @@
         <activity
             android:name="com.stringbitking.noidea.MainActivity"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+           
         </activity>
         <activity
             android:name="com.stringbitking.noidea.SuggestionsListActivity"
@@ -37,6 +33,21 @@
             android:name="com.stringbitking.noidea.PostSuggestionActivity"
             android:label="@string/title_activity_post_suggestion" >
         </activity>
+        <activity
+            android:name="com.stringbitking.noidea.LoginActivity"
+            android:label="@string/title_activity_login" >
+             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.facebook.LoginActivity"
+                  android:theme="@android:style/Theme.Translucent.NoTitleBar"
+                  android:label="@string/app_name" />
+        
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"/>
+        
     </application>
 
 </manifest>
