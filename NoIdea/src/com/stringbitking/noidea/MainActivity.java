@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
 
 	public static final String CATEGORY_ID = "com.stringbitking.noidea.suggestion_id";
 
-	private static String categoriesUrl = "http://10.0.3.2:3000/categorieslist";
+	private static String categoriesUrl = Constants.CATEGORIES_URL;
 
 	private List<Category> categories;
 
@@ -44,14 +44,14 @@ public class MainActivity extends Activity {
 
 		new GetCategoriesJSON().execute();
 		
-
 	}
 
 	private void loadCategories() {
 
 		Spinner spinner = (Spinner) findViewById(R.id.categoriesSpinner);
 		
-		CategoriesAdapter spinnerAdapter = new CategoriesAdapter(this, categories);
+		CategoriesAdapter spinnerAdapter = new CategoriesAdapter(this, 
+					CategoriesProvider.get().getCategoriesList(), true);
 		
 		spinner.setAdapter(spinnerAdapter);
 
@@ -117,29 +117,7 @@ public class MainActivity extends Activity {
 
 			}
 
-			try {
-
-				JSONArray arrResult = new JSONArray(result);
-
-				categories = new ArrayList<Category>();
-
-				for (int i = 0; i < arrResult.length(); i++) {
-
-					JSONObject categoryJSON = arrResult.getJSONObject(i);
-					
-					Category cat = new Category();
-					cat.setId(categoryJSON.getString("_id"));
-					cat.setName(categoryJSON.getString("name"));
-					cat.setVerb(categoryJSON.getString("verb"));
-					categories.add(cat);
-					
-				}
-
-			} catch (JSONException e) {
-
-				e.printStackTrace();
-
-			}
+			
 
 			return result;
 
@@ -147,93 +125,43 @@ public class MainActivity extends Activity {
 
 		protected void onPostExecute(String result) {
 
+			parseCategoriesJSON(result);
+			
+			CategoriesProvider categoriesProvider = CategoriesProvider.get();
+			categoriesProvider.update(categories);
+			
 			loadCategories();
 
 		}
 
 	}
-
-	private class CategoriesAdapter implements SpinnerAdapter {
-
-		private List<Category> data;
-		private Activity context;
+	
+	private void parseCategoriesJSON(String result) {
 		
-		public CategoriesAdapter(Activity context, List<Category> categories) {
-			
-			this.context = context;
-			this.data = categories;
-			
-		}
+		try {
 
-		@Override
-		public int getCount() {
-			return data.size();
-		}
+			JSONArray arrResult = new JSONArray(result);
 
-		@Override
-		public Object getItem(int position) {
-			return data.get(position);
-		}
+			categories = new ArrayList<Category>();
 
-		@Override
-		public long getItemId(int position) {
-			return 1;
-		}
+			for (int i = 0; i < arrResult.length(); i++) {
 
-		@Override
-		public int getItemViewType(int arg0) {
-			return 0;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			TextView textView = (TextView) View.inflate(context, android.R.layout.simple_spinner_item, null);
-	        textView.setText(data.get(position).getVerb());
-	        return textView;
-		}
-
-		@Override
-		public int getViewTypeCount() {
-			return 1;
-		}
-
-		@Override
-		public boolean hasStableIds() {
-			return false;
-		}
-
-		@Override
-		public boolean isEmpty() {
-			
-			if(data != null && data.size() > 0) {
-				return false;
+				JSONObject categoryJSON = arrResult.getJSONObject(i);
+				
+				Category cat = new Category();
+				cat.setId(categoryJSON.getString("_id"));
+				cat.setName(categoryJSON.getString("name"));
+				cat.setVerb(categoryJSON.getString("verb"));
+				categories.add(cat);
+				
 			}
-			
-			return true;
-		}
 
-		@Override
-		public void registerDataSetObserver(DataSetObserver arg0) {
-			// TODO Auto-generated method stub
+		} catch (JSONException e) {
+
+			e.printStackTrace();
 
 		}
-
-		@Override
-		public void unregisterDataSetObserver(DataSetObserver arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public View getDropDownView(int position, View convertView, ViewGroup parent) {
-	        if (convertView == null) {
-	            LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	            convertView = vi.inflate(android.R.layout.simple_spinner_dropdown_item, null);
-	        }
-	        ((TextView) convertView).setText(data.get(position).getVerb());
-	        return convertView;
-		}
-
+		
 	}
 
 	public void onClickTellMe(View view) {
@@ -245,6 +173,14 @@ public class MainActivity extends Activity {
 		Intent newIntent = new Intent(this, SuggestionsListActivity.class);
 
 		newIntent.putExtra(CATEGORY_ID, selectedCategory.getId());
+
+		startActivity(newIntent);
+
+	}
+	
+	public void onClickPostSuggestion(View view) {
+
+		Intent newIntent = new Intent(this, PostSuggestionActivity.class);
 
 		startActivity(newIntent);
 

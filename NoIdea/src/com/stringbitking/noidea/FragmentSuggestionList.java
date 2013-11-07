@@ -38,7 +38,7 @@ public class FragmentSuggestionList extends ListFragment {
 	private List<Suggestion> suggestionsList;
 	private List<Drawable> suggestionImages;
 
-	private static String suggestionsUrl = "http://10.0.3.2:3000/suggestions/";
+	private static String suggestionsUrl = Constants.SUGGESTIONS_URL;
 	private String categoryId;
 
 	@Override
@@ -168,22 +168,6 @@ public class FragmentSuggestionList extends ListFragment {
 				
 			}
 
-//			String imageUrl = "http://10.0.3.2:3000/images/"
-//					+ theSuggestion.getImage();
-			// Drawable drawableImage = LoadImageFromWebOperations(imageUrl);
-			// suggestionImageView.setImageDrawable(drawableImage);
-
-//			try {
-//				Bitmap bitmap = BitmapFactory
-//						.decodeStream((InputStream) new URL(imageUrl)
-//								.getContent());
-//				suggestionImageView.setImageBitmap(bitmap);
-//			} catch (MalformedURLException e) {
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-
 			return "";
 
 		}
@@ -263,7 +247,7 @@ public class FragmentSuggestionList extends ListFragment {
 		protected void onPostExecute(String result) {
 
 			try {
-
+  
 				suggestionsList = new ArrayList<Suggestion>();
 				JSONArray arrResult = new JSONArray(result);
 
