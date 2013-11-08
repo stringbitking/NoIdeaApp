@@ -262,11 +262,11 @@ containing a value of this type.
         public static final int fragmentSuggestionDescriptionTextView=0x7f04002f;
         public static final int fragmentSuggestionTitleTextView=0x7f04002e;
         public static final int large=0x7f040002;
-        public static final int login_button=0x7f04003a;
+        public static final int login_button=0x7f040039;
+        public static final int noLoginButton=0x7f04003a;
         public static final int normal=0x7f040001;
         public static final int picker_subtitle=0x7f040028;
         public static final int postSuggestionButton=0x7f040037;
-        public static final int profile_name=0x7f040039;
         public static final int selectionFragment=0x7f040004;
         public static final int selection_profile_pic=0x7f040034;
         public static final int selection_user_name=0x7f040035;

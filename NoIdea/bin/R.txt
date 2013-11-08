@@ -115,11 +115,11 @@ int id fragmentContainer 0x7f040018
 int id fragmentSuggestionDescriptionTextView 0x7f04002f
 int id fragmentSuggestionTitleTextView 0x7f04002e
 int id large 0x7f040002
-int id login_button 0x7f04003a
+int id login_button 0x7f040039
+int id noLoginButton 0x7f04003a
 int id normal 0x7f040001
 int id picker_subtitle 0x7f040028
 int id postSuggestionButton 0x7f040037
-int id profile_name 0x7f040039
 int id selectionFragment 0x7f040004
 int id selection_profile_pic 0x7f040034
 int id selection_user_name 0x7f040035

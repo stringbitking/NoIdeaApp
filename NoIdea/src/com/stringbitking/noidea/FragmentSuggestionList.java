@@ -258,7 +258,7 @@ public class FragmentSuggestionList extends ListFragment {
 					Suggestion currentSuggestion = new Suggestion();
 					currentSuggestion.setId(suggestionJSON.getString("_id"));
 					currentSuggestion.setCategory(suggestionJSON
-							.getString("category"));
+							.getString("_category"));
 					currentSuggestion.setDescription(suggestionJSON
 							.getString("description"));
 					currentSuggestion.setTitle(suggestionJSON

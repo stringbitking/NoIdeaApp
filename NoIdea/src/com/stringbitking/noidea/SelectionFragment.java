@@ -1,11 +1,13 @@
 package com.stringbitking.noidea;
 
 import android.content.Intent;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.Request;
@@ -23,6 +25,7 @@ public class SelectionFragment extends Fragment {
 
 	private ProfilePictureView profilePictureView;
 	private TextView userNameView;
+	private Button createSuggestionButton;
 	
 	private UiLifecycleHelper uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -53,11 +56,20 @@ public class SelectionFragment extends Fragment {
 		// Find the user's name view
 		userNameView = (TextView) view.findViewById(R.id.selection_user_name);
 		
+		createSuggestionButton = (Button) view.findViewById(R.id.postSuggestionButton);
+		
 		// Check for an open session
 	    Session session = Session.getActiveSession();
 	    if (session != null && session.isOpened()) {
 	        // Get the user's data
 	        makeMeRequest(session);
+	    }
+	    else {
+	    	
+	    	profilePictureView.setVisibility(View.INVISIBLE);
+	    	userNameView.setVisibility(View.INVISIBLE);
+	    	createSuggestionButton.setVisibility(View.INVISIBLE);
+	    	
 	    }
 
 		return view;
@@ -125,6 +137,18 @@ public class SelectionFragment extends Fragment {
 	    if (session != null && session.isOpened()) {
 	        // Get the user's data.
 	        makeMeRequest(session);
+	        
+	        profilePictureView.setVisibility(View.VISIBLE);
+	    	userNameView.setVisibility(View.VISIBLE);
+	    	createSuggestionButton.setVisibility(View.VISIBLE);
+	    	
+	    }
+	    else {
+	    	
+	    	profilePictureView.setVisibility(View.INVISIBLE);
+	    	userNameView.setVisibility(View.INVISIBLE);
+	    	createSuggestionButton.setVisibility(View.INVISIBLE);
+	    	
 	    }
 	}
 
