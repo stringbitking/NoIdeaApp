@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--
-        Used to define the resource id for your
-	    ViewPager. The FragmentManager requires all
-	    views used as a Fragment container to have
-	    an id
-    -->
-
     <item name="viewPager" type="id"/>
+    <item type="id" name="actionbar_compat" />
+    <item type="id" name="actionbar_compat_title" />
+    <item type="id" name="actionbar_compat_item_refresh_progress" />
+    <item type="id" name="actionbar_compat_item_refresh" />
+    <item type="id" name="menu_refresh" />
 
 </resources>

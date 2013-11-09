@@ -3,18 +3,19 @@ package com.stringbitking.noidea;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 
-public class LoginActivity extends FragmentActivity {
+public class LoginActivity extends ActionBarFragmentActivity {
 
 	private static final int SPLASH = 0;
 	private static final int SELECTION = 1;
@@ -67,33 +68,46 @@ public class LoginActivity extends FragmentActivity {
 	}
 
 	public void onClickOpenSelection(View view) {
-		
-		showFragment(SELECTION, true);
+
+		// showFragment(SELECTION, true);
 
 	}
 
-	public void onClickBrwoseSuggestion(View view) {
+	// @Override
+	// public boolean onPrepareOptionsMenu(Menu menu) {
+	// // only add the menu when the selection fragment is showing
+	// if (fragments[SELECTION].isVisible()) {
+	// if (menu.size() == 0) {
+	// settings = menu.add(R.string.action_settings);
+	// }
+	// return true;
+	// } else {
+	// menu.clear();
+	// settings = null;
+	// }
+	// return false;
+	// }
 
-		Intent newIntent = new Intent(this, MainActivity.class);
-
-		startActivity(newIntent);
-
-	}
-
+	// @Override
+	// public boolean onOptionsItemSelected(MenuItem item) {
+	// if (item.equals(settings)) {
+	// showFragment(SETTINGS, true);
+	// return true;
+	// }
+	// return false;
+	// }
+	
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		// only add the menu when the selection fragment is showing
-		if (fragments[SELECTION].isVisible()) {
-			if (menu.size() == 0) {
-				settings = menu.add(R.string.action_settings);
-			}
-			return true;
-		} else {
-			menu.clear();
-			settings = null;
-		}
-		return false;
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.main, menu);
+
+		// Calling super after populating the menu is necessary here to ensure
+		// that the
+		// action bar helpers have a chance to handle this event.
+		return super.onCreateOptionsMenu(menu);
 	}
+
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -101,7 +115,35 @@ public class LoginActivity extends FragmentActivity {
 			showFragment(SETTINGS, true);
 			return true;
 		}
-		return false;
+		
+		Boolean isActivityCalled = false;
+		Intent intent = new Intent();
+
+		switch (item.getItemId()) {
+		
+		case R.id.menu_home:
+			break;
+
+		case R.id.menu_search:
+			intent = new Intent(this, MainActivity.class);
+			isActivityCalled = true;
+			break;
+
+		case R.id.menu_new:
+			intent = new Intent(this, PostSuggestionActivity.class);
+			isActivityCalled = true;
+			break;
+			
+		case R.id.menu_favourite:
+			break;
+
+		}
+		
+		if(isActivityCalled) {
+			startActivity(intent);
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void showFragment(int fragmentIndex, boolean addToBackStack) {

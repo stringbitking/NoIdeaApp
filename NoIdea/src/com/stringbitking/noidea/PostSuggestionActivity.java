@@ -22,13 +22,15 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class PostSuggestionActivity extends Activity {
+public class PostSuggestionActivity extends ActionBarActivity {
 
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
@@ -228,9 +230,47 @@ public class PostSuggestionActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.post_suggestion, menu);
-		return true;
+		MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.main, menu);
+
+		// Calling super after populating the menu is necessary here to ensure
+		// that the
+		// action bar helpers have a chance to handle this event.
+		return super.onCreateOptionsMenu(menu);
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		Boolean isActivityCalled = false;
+		Intent intent = new Intent();
+
+		switch (item.getItemId()) {
+		
+		case R.id.menu_home:
+			intent = new Intent(this, LoginActivity.class);
+			isActivityCalled = true;
+			break;
+
+		case R.id.menu_search:
+			intent = new Intent(this, MainActivity.class);
+			isActivityCalled = true;
+			break;
+
+		case R.id.menu_new:
+			break;
+			
+		case R.id.menu_favourite:
+			break;
+
+		}
+		
+		if(isActivityCalled) {
+			startActivity(intent);
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 }

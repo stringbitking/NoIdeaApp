@@ -23,6 +23,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Spinner;
@@ -180,9 +182,47 @@ public class MainActivity extends Activity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		MenuInflater menuInflater = getMenuInflater();
+		menuInflater.inflate(R.menu.main, menu);
+
+		// Calling super after populating the menu is necessary here to ensure
+		// that the
+		// action bar helpers have a chance to handle this event.
+		return super.onCreateOptionsMenu(menu);
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		Boolean isActivityCalled = false;
+		Intent intent = new Intent();
+
+		switch (item.getItemId()) {
+		
+		case R.id.menu_home:
+			intent = new Intent(this, LoginActivity.class);
+			isActivityCalled = true;
+			break;
+
+		case R.id.menu_search:
+			break;
+
+		case R.id.menu_new:
+			intent = new Intent(this, PostSuggestionActivity.class);
+			isActivityCalled = true;
+			break;
+			
+		case R.id.menu_favourite:
+			break;
+
+		}
+		
+		if(isActivityCalled) {
+			startActivity(intent);
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 }
