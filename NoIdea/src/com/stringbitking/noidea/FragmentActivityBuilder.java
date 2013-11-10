@@ -1,5 +1,7 @@
 package com.stringbitking.noidea;
 
+import com.stringbitking.noidea.actionbar.ActionBarFragmentActivity;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -8,7 +10,7 @@ import android.support.v4.app.FragmentManager;
 // NEW : This class will use the FragmentManager to ad
 // Fragments to multiple Activity views
 
-public abstract class FragmentActivityBuilder extends FragmentActivity {
+public abstract class FragmentActivityBuilder extends ActionBarFragmentActivity {
 
 	// This method must be implemented so that the right
 	// type of Fragment can be returned.

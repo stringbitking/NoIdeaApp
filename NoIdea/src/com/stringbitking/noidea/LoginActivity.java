@@ -107,6 +107,9 @@ public class LoginActivity extends ActionBarFragmentActivity {
 			break;
 			
 		case R.id.menu_favourite:
+			intent = new Intent(this, FavouritesListActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			isActivityCalled = true;
 			break;
 
 		}

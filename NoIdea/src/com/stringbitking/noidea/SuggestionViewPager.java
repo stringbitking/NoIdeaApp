@@ -1,15 +1,22 @@
 package com.stringbitking.noidea;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 import com.stringbitking.noidea.models.Suggestion;
+import com.stringbitking.noidea.models.User;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 
 public class SuggestionViewPager extends FragmentActivity {
 
@@ -107,6 +114,36 @@ public class SuggestionViewPager extends FragmentActivity {
 		
 	}
 
+	public void onClickAddToFavourites(View view) {
+		new AddToFavouritesAsync().execute();
+	}
+	
+	private class AddToFavouritesAsync extends AsyncTask<String, String, String> {
+
+		protected String doInBackground(String... arg0) {
+			
+			int position = theViewPager.getCurrentItem();
+			Suggestion suggestion = suggestionsList.get(position);
+			
+
+			List<NameValuePair> content = new ArrayList<NameValuePair>(2);
+			content.add(new BasicNameValuePair("suggestionId", suggestion.getId()));
+			content.add(new BasicNameValuePair("facebookId", User.getId()));
+			String favouritesUrl = Constants.ADD_FAVOURITE_URL;
+			
+			String result = HttpRequester.PostJSON(favouritesUrl, content);
+			return result;
+
+		}
+
+		protected void onPostExecute(String result) {
+
+			// TODO inform the user for successful addition
+
+		}
+
+	}
+	
 }
 
 

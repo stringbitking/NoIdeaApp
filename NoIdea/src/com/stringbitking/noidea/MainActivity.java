@@ -66,63 +66,7 @@ public class MainActivity extends ActionBarActivity {
 
 		protected String doInBackground(String... arg0) {
 
-			DefaultHttpClient httpclient = new DefaultHttpClient(
-					new BasicHttpParams());
-
-			HttpGet httppost = new HttpGet(categoriesUrl);
-
-			httppost.setHeader("Content-type", "application/json");
-
-			// Used to read data from the URL
-			InputStream inputStream = null;
-
-			// Will hold all the data gathered from the URL
-			String result = null;
-
-			try {
-
-				HttpResponse response = httpclient.execute(httppost);
-
-				// The content from the requested URL along with headers, etc.
-				HttpEntity entity = response.getEntity();
-
-				// Get the main content from the URL
-				inputStream = entity.getContent();
-
-				// JSON is UTF-8 by default
-				// BufferedReader reads data from the InputStream until the
-				// Buffer is full
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(inputStream, "UTF-8"), 8);
-
-				// Will store the data
-				StringBuilder theStringBuilder = new StringBuilder();
-
-				String line = null;
-
-				while ((line = reader.readLine()) != null) {
-
-					// Add data from the buffer to the StringBuilder
-					theStringBuilder.append(line + "\n");
-				}
-
-				// Store the complete data in result
-				result = theStringBuilder.toString();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-
-				// Close the InputStream when you're done with it
-				try {
-					if (inputStream != null)
-						inputStream.close();
-				} catch (Exception e) {
-				}
-
-			}
-
-			
+			String result = HttpRequester.GetJSON(categoriesUrl);
 
 			return result;
 
@@ -194,7 +138,6 @@ public class MainActivity extends ActionBarActivity {
 		return super.onCreateOptionsMenu(menu);
 	}
 
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
@@ -219,6 +162,9 @@ public class MainActivity extends ActionBarActivity {
 			break;
 			
 		case R.id.menu_favourite:
+			intent = new Intent(this, FavouritesListActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			isActivityCalled = true;
 			break;
 
 		}

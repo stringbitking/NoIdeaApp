@@ -1,10 +1,12 @@
 package com.stringbitking.noidea;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.stringbitking.noidea.models.Suggestion;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 
 public class CurrentSuggestions {
 
@@ -40,6 +42,12 @@ public class CurrentSuggestions {
 		return suggestionsList;
 
 	}
+	
+	public ArrayList<Suggestion> getSuggestionsImages() {
+
+		return suggestionsList;
+
+	}
 
 	public Suggestion getSuggestion(String id) {
 
@@ -57,9 +65,13 @@ public class CurrentSuggestions {
 
 	}
 
-	public void update(ArrayList<Suggestion> suggestionsListNew) {
+	public void update(ArrayList<Suggestion> suggestionsListNew, List<Drawable> suggestionImages) {
 
 		this.suggestionsList = suggestionsListNew;
+		
+		for(int i = 0; i < suggestionImages.size(); i++) {
+			this.suggestionsList.get(i).setImageDrawable(suggestionImages.get(i));
+		}
 		
 	}
 

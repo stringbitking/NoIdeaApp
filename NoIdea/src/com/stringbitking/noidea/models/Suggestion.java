@@ -1,5 +1,7 @@
 package com.stringbitking.noidea.models;
 
+import android.graphics.drawable.Drawable;
+
 public class Suggestion {
 
 	private String id;
@@ -7,7 +9,16 @@ public class Suggestion {
 	private String title;
 	private String description;
 	private String image;
+	private Drawable imageDrawable;
 	
+	public Drawable getImageDrawable() {
+		return imageDrawable;
+	}
+
+	public void setImageDrawable(Drawable imageDrawable) {
+		this.imageDrawable = imageDrawable;
+	}
+
 	public Suggestion() {
 		
 	}

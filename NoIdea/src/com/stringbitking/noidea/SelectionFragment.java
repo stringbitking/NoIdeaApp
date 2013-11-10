@@ -1,7 +1,22 @@
 package com.stringbitking.noidea;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+
 import android.content.Intent;
 import android.opengl.Visibility;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -127,6 +142,8 @@ public class SelectionFragment extends Fragment {
 	                    profilePictureView.setProfileId(User.getId());
 	                    // Set the Textview's text to the user's name.
 	                    userNameView.setText(User.getName());
+	                    
+	                    new GetUserInformation().execute();
 	                }
 	            }
 	            if (response.getError() != null) {
@@ -136,7 +153,7 @@ public class SelectionFragment extends Fragment {
 	    });
 	    
 	    request.executeAsync();
-	} 
+	}
 	
 	private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
 	    if (session != null && session.isOpened()) {
@@ -155,4 +172,25 @@ public class SelectionFragment extends Fragment {
 	    }
 	}
 
+	private class GetUserInformation extends AsyncTask<String, String, String> {
+
+		protected String doInBackground(String... arg0) {
+
+			List<NameValuePair> content = new ArrayList<NameValuePair>(1);
+			content.add(new BasicNameValuePair("name", User.getName()));
+			String getUserUrl = Constants.USERS_URL + User.getId();
+			
+			String result = HttpRequester.PostJSON(getUserUrl, content);
+			return result;
+
+		}
+
+		protected void onPostExecute(String result) {
+
+			// TODO display user info in the activity
+
+		}
+
+	}
+	
 }
