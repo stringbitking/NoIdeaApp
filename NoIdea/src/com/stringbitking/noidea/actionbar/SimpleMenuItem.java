@@ -1,4 +1,4 @@
-package com.stringbitking.noidea;
+package com.stringbitking.noidea.actionbar;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -8,12 +8,6 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 
-/**
- * A <em>really</em> dumb implementation of the {@link android.view.MenuItem} interface, that's only
- * useful for our actionbar-compat purposes. See
- * <code>com.android.internal.view.menu.MenuItemImpl</code> in AOSP for a more complete
- * implementation.
- */
 public class SimpleMenuItem implements MenuItem {
 
     private SimpleMenu mMenu;

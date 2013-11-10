@@ -41,14 +41,5 @@
         android:layout_marginBottom="30dp"
         android:layout_marginTop="30dp" />
 
-    <Button
-        android:id="@+id/noLoginButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="30dp"
-        android:layout_marginTop="30dp"
-        android:text="Continue without login"
-        android:onClick="onClickOpenSelection" />
 
 </LinearLayout>

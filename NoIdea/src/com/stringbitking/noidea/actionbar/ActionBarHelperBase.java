@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package com.stringbitking.noidea;
+package com.stringbitking.noidea.actionbar;
+
+import com.stringbitking.noidea.R;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

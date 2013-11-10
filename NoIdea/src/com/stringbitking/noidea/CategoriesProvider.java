@@ -3,6 +3,8 @@ package com.stringbitking.noidea;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.stringbitking.noidea.models.Category;
+
 import android.content.Context;
 
 public class CategoriesProvider {

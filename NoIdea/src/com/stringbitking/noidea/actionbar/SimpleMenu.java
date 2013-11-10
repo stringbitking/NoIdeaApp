@@ -1,4 +1,4 @@
-package com.stringbitking.noidea;
+package com.stringbitking.noidea.actionbar;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,12 +11,6 @@ import android.view.SubMenu;
 
 import java.util.ArrayList;
 
-/**
- * A <em>really</em> dumb implementation of the {@link android.view.Menu} interface, that's only
- * useful for our actionbar-compat purposes. See
- * <code>com.android.internal.view.menu.MenuBuilder</code> in AOSP for a more complete
- * implementation.
- */
 public class SimpleMenu implements Menu {
 
     private Context mContext;

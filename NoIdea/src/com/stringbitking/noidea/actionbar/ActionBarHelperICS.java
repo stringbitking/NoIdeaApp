@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.stringbitking.noidea;
+package com.stringbitking.noidea.actionbar;
 
 import android.app.Activity;
 import android.content.Context;

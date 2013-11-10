@@ -15,6 +15,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.stringbitking.noidea.actionbar.ActionBarActivity;
+import com.stringbitking.noidea.models.Category;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +34,7 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
 
 	public static final String CATEGORY_ID = "com.stringbitking.noidea.suggestion_id";
 
@@ -202,6 +205,7 @@ public class MainActivity extends Activity {
 		
 		case R.id.menu_home:
 			intent = new Intent(this, LoginActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			isActivityCalled = true;
 			break;
 
@@ -210,6 +214,7 @@ public class MainActivity extends Activity {
 
 		case R.id.menu_new:
 			intent = new Intent(this, PostSuggestionActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			isActivityCalled = true;
 			break;
 			

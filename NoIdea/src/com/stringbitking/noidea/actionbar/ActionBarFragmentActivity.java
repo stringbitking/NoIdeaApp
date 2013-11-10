@@ -1,22 +1,14 @@
-
-package com.stringbitking.noidea;
+package com.stringbitking.noidea.actionbar;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 
-/**
- * A base activity that defers common functionality across app activities to an {@link
- * ActionBarHelper}.
- *
- * NOTE: dynamically marking menu items as invisible/visible is not currently supported.
- *
- * NOTE: this may used with the Android Compatibility Package by extending
- * android.support.v4.app.FragmentActivity instead of {@link Activity}.
- */
-public abstract class ActionBarActivity extends Activity {
-    final ActionBarHelper mActionBarHelper = ActionBarHelper.createInstance(this);
+public class ActionBarFragmentActivity extends FragmentActivity {
+
+	final ActionBarHelper mActionBarHelper = ActionBarHelper.createInstance(this);
 
     /**
      * Returns the {@link ActionBarHelper} for this activity.
@@ -58,11 +50,12 @@ public abstract class ActionBarActivity extends Activity {
         retValue |= super.onCreateOptionsMenu(menu);
         return retValue;
     }
-
+    
     /**{@inheritDoc}*/
     @Override
     protected void onTitleChanged(CharSequence title, int color) {
         mActionBarHelper.onTitleChanged(title, color);
         super.onTitleChanged(title, color);
     }
+	
 }

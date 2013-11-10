@@ -17,6 +17,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
+import com.stringbitking.noidea.models.User;
 
 public class SelectionFragment extends Fragment {
 
@@ -25,7 +26,6 @@ public class SelectionFragment extends Fragment {
 
 	private ProfilePictureView profilePictureView;
 	private TextView userNameView;
-	private Button createSuggestionButton;
 	
 	private UiLifecycleHelper uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -56,8 +56,6 @@ public class SelectionFragment extends Fragment {
 		// Find the user's name view
 		userNameView = (TextView) view.findViewById(R.id.selection_user_name);
 		
-		createSuggestionButton = (Button) view.findViewById(R.id.postSuggestionButton);
-		
 		// Check for an open session
 	    Session session = Session.getActiveSession();
 	    if (session != null && session.isOpened()) {
@@ -68,7 +66,6 @@ public class SelectionFragment extends Fragment {
 	    	
 	    	profilePictureView.setVisibility(View.INVISIBLE);
 	    	userNameView.setVisibility(View.INVISIBLE);
-	    	createSuggestionButton.setVisibility(View.INVISIBLE);
 	    	
 	    }
 
@@ -117,11 +114,19 @@ public class SelectionFragment extends Fragment {
 	            // If the response is successful
 	            if (session == Session.getActiveSession()) {
 	                if (user != null) {
+	                	
+	                	String userId = user.getId();
+	                	String userName =  user.getName();
+	                	
+	                	User.setId(userId);
+	                	User.setName(userName);
+	                	User.setIsUserLoggedIn(true);
+	                	
 	                    // Set the id for the ProfilePictureView
 	                    // view that in turn displays the profile picture.
-	                    profilePictureView.setProfileId(user.getId());
+	                    profilePictureView.setProfileId(User.getId());
 	                    // Set the Textview's text to the user's name.
-	                    userNameView.setText(user.getName());
+	                    userNameView.setText(User.getName());
 	                }
 	            }
 	            if (response.getError() != null) {
@@ -140,14 +145,12 @@ public class SelectionFragment extends Fragment {
 	        
 	        profilePictureView.setVisibility(View.VISIBLE);
 	    	userNameView.setVisibility(View.VISIBLE);
-	    	createSuggestionButton.setVisibility(View.VISIBLE);
 	    	
 	    }
 	    else {
 	    	
 	    	profilePictureView.setVisibility(View.INVISIBLE);
 	    	userNameView.setVisibility(View.INVISIBLE);
-	    	createSuggestionButton.setVisibility(View.INVISIBLE);
 	    	
 	    }
 	}

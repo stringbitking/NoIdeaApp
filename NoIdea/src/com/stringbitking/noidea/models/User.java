@@ -1,0 +1,28 @@
+package com.stringbitking.noidea.models;
+
+public class User {
+	
+	private static String id;
+	private static String name;
+	private static Boolean isUserLoggedIn = false;
+	
+	public static String getId() {
+		return id;
+	}
+	public static void setId(String id) {
+		User.id = id;
+	}
+	public static String getName() {
+		return name;
+	}
+	public static void setName(String name) {
+		User.name = name;
+	}
+	public static Boolean getIsUserLoggedIn() {
+		return isUserLoggedIn;
+	}
+	public static void setIsUserLoggedIn(Boolean isUserLoggedIn) {
+		User.isUserLoggedIn = isUserLoggedIn;
+	}
+	
+}

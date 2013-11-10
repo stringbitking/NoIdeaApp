@@ -2,6 +2,8 @@ package com.stringbitking.noidea;
 
 import java.util.List;
 
+import com.stringbitking.noidea.models.Category;
+
 import android.app.Activity;
 import android.content.Context;
 import android.database.DataSetObserver;

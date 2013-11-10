@@ -2,6 +2,8 @@ package com.stringbitking.noidea;
 
 import java.util.ArrayList;
 
+import com.stringbitking.noidea.models.Suggestion;
+
 import android.content.Context;
 
 public class CurrentSuggestions {

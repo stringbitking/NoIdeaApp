@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.stringbitking.noidea;
+package com.stringbitking.noidea.actionbar;
+
+import com.stringbitking.noidea.R;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 

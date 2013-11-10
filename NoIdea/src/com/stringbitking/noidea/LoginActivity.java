@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.stringbitking.noidea.actionbar.ActionBarFragmentActivity;
+import com.stringbitking.noidea.models.User;
 
 public class LoginActivity extends ActionBarFragmentActivity {
 
@@ -59,43 +61,11 @@ public class LoginActivity extends ActionBarFragmentActivity {
 		//
 	}
 
-	public void onClickCreateSuggestion(View view) {
-
-		Intent newIntent = new Intent(this, PostSuggestionActivity.class);
-
-		startActivity(newIntent);
-
+	public void onClickLogout(View view) {
+		
+		showFragment(SETTINGS, true);
+		
 	}
-
-	public void onClickOpenSelection(View view) {
-
-		// showFragment(SELECTION, true);
-
-	}
-
-	// @Override
-	// public boolean onPrepareOptionsMenu(Menu menu) {
-	// // only add the menu when the selection fragment is showing
-	// if (fragments[SELECTION].isVisible()) {
-	// if (menu.size() == 0) {
-	// settings = menu.add(R.string.action_settings);
-	// }
-	// return true;
-	// } else {
-	// menu.clear();
-	// settings = null;
-	// }
-	// return false;
-	// }
-
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// if (item.equals(settings)) {
-	// showFragment(SETTINGS, true);
-	// return true;
-	// }
-	// return false;
-	// }
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -126,11 +96,13 @@ public class LoginActivity extends ActionBarFragmentActivity {
 
 		case R.id.menu_search:
 			intent = new Intent(this, MainActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			isActivityCalled = true;
 			break;
 
 		case R.id.menu_new:
 			intent = new Intent(this, PostSuggestionActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			isActivityCalled = true;
 			break;
 			
@@ -209,10 +181,12 @@ public class LoginActivity extends ActionBarFragmentActivity {
 				// If the session state is open:
 				// Show the authenticated fragment
 				showFragment(SELECTION, false);
+				User.setIsUserLoggedIn(true);
 			} else if (state.isClosed()) {
 				// If the session state is closed:
 				// Show the login fragment
 				showFragment(SPLASH, false);
+				User.setIsUserLoggedIn(false);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package com.stringbitking.noidea;
+package com.stringbitking.noidea.models;
 
 public class Category {
 	

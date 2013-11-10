@@ -13,6 +13,10 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.stringbitking.noidea.actionbar.ActionBarActivity;
+import com.stringbitking.noidea.models.Category;
+import com.stringbitking.noidea.models.User;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -46,8 +50,23 @@ public class PostSuggestionActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_suggestion);
 
+		redirectIfUserIsNotLoggedIn();
 		loadCategories();
 
+	}
+
+	@Override
+	protected void onResume() {
+		redirectIfUserIsNotLoggedIn();
+		super.onResume();
+	}
+
+	private void redirectIfUserIsNotLoggedIn() {
+		if (!User.getIsUserLoggedIn()) {
+			Intent intent = new Intent(this, LoginActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+		}
 	}
 
 	private void loadCategories() {
@@ -187,7 +206,7 @@ public class PostSuggestionActivity extends ActionBarActivity {
 			String title = params[0];
 			String description = params[1];
 			String categoryId = params[2];
-			
+
 			File suggestionImage = new File(fileUri.getPath());
 			FileBody imgBody = new FileBody(suggestionImage);
 
@@ -198,14 +217,14 @@ public class PostSuggestionActivity extends ActionBarActivity {
 
 				MultipartEntityBuilder multipartBuilder = MultipartEntityBuilder
 						.create();
-				
+
 				multipartBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-				
+
 				multipartBuilder.addTextBody("title", title);
 				multipartBuilder.addTextBody("description", description);
 				multipartBuilder.addTextBody("categoryId", categoryId);
 				multipartBuilder.addPart("image", imgBody);
-				
+
 				httppost.setEntity(multipartBuilder.build());
 
 				httpclient.execute(httppost);
@@ -239,34 +258,35 @@ public class PostSuggestionActivity extends ActionBarActivity {
 		return super.onCreateOptionsMenu(menu);
 	}
 
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
+
 		Boolean isActivityCalled = false;
 		Intent intent = new Intent();
 
 		switch (item.getItemId()) {
-		
+
 		case R.id.menu_home:
 			intent = new Intent(this, LoginActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			isActivityCalled = true;
 			break;
 
 		case R.id.menu_search:
 			intent = new Intent(this, MainActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			isActivityCalled = true;
 			break;
 
 		case R.id.menu_new:
 			break;
-			
+
 		case R.id.menu_favourite:
 			break;
 
 		}
-		
-		if(isActivityCalled) {
+
+		if (isActivityCalled) {
 			startActivity(intent);
 		}
 
