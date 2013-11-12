@@ -128,7 +128,7 @@ public class SuggestionViewPager extends FragmentActivity {
 
 			List<NameValuePair> content = new ArrayList<NameValuePair>(2);
 			content.add(new BasicNameValuePair("suggestionId", suggestion.getId()));
-			content.add(new BasicNameValuePair("facebookId", User.getId()));
+			content.add(new BasicNameValuePair("facebookId", User.getFacebookId()));
 			String favouritesUrl = Constants.ADD_FAVOURITE_URL;
 			
 			String result = HttpRequester.PostJSON(favouritesUrl, content);

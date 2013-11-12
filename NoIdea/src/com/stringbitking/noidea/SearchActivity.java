@@ -34,7 +34,7 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-public class MainActivity extends ActionBarActivity {
+public class SearchActivity extends ActionBarActivity {
 
 	public static final String CATEGORY_ID = "com.stringbitking.noidea.suggestion_id";
 
@@ -147,7 +147,7 @@ public class MainActivity extends ActionBarActivity {
 		switch (item.getItemId()) {
 		
 		case R.id.menu_home:
-			intent = new Intent(this, LoginActivity.class);
+			intent = new Intent(this, HomeActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			isActivityCalled = true;
 			break;

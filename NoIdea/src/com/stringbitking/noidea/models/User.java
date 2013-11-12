@@ -3,6 +3,7 @@ package com.stringbitking.noidea.models;
 public class User {
 	
 	private static String id;
+	private static String facebookId;
 	private static String name;
 	private static Boolean isUserLoggedIn = false;
 	
@@ -23,6 +24,12 @@ public class User {
 	}
 	public static void setIsUserLoggedIn(Boolean isUserLoggedIn) {
 		User.isUserLoggedIn = isUserLoggedIn;
+	}
+	public static String getFacebookId() {
+		return facebookId;
+	}
+	public static void setFacebookId(String facebookId) {
+		User.facebookId = facebookId;
 	}
 	
 }

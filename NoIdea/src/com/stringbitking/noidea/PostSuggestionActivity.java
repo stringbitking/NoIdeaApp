@@ -63,7 +63,7 @@ public class PostSuggestionActivity extends ActionBarActivity {
 
 	private void redirectIfUserIsNotLoggedIn() {
 		if (!User.getIsUserLoggedIn()) {
-			Intent intent = new Intent(this, LoginActivity.class);
+			Intent intent = new Intent(this, HomeActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 		}
@@ -223,6 +223,7 @@ public class PostSuggestionActivity extends ActionBarActivity {
 				multipartBuilder.addTextBody("title", title);
 				multipartBuilder.addTextBody("description", description);
 				multipartBuilder.addTextBody("categoryId", categoryId);
+				multipartBuilder.addTextBody("author", User.getId());
 				multipartBuilder.addPart("image", imgBody);
 
 				httppost.setEntity(multipartBuilder.build());
@@ -267,13 +268,13 @@ public class PostSuggestionActivity extends ActionBarActivity {
 		switch (item.getItemId()) {
 
 		case R.id.menu_home:
-			intent = new Intent(this, LoginActivity.class);
+			intent = new Intent(this, HomeActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			isActivityCalled = true;
 			break;
 
 		case R.id.menu_search:
-			intent = new Intent(this, MainActivity.class);
+			intent = new Intent(this, SearchActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			isActivityCalled = true;
 			break;

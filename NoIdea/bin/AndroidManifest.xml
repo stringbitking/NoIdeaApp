@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.stringbitking.noidea.MainActivity"
+            android:name="com.stringbitking.noidea.SearchActivity"
             android:label="@string/app_name" >
            
         </activity>
@@ -38,7 +38,7 @@
             android:label="@string/title_activity_post_suggestion" >
         </activity>
         <activity
-            android:name="com.stringbitking.noidea.LoginActivity"
+            android:name="com.stringbitking.noidea.HomeActivity"
             android:label="@string/title_activity_login" >
              <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

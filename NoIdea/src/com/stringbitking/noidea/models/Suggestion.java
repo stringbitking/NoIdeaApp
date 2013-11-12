@@ -10,7 +10,25 @@ public class Suggestion {
 	private String description;
 	private String image;
 	private Drawable imageDrawable;
+	private String author;
+	private String authorId;
 	
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getAuthorId() {
+		return authorId;
+	}
+
+	public void setAuthorId(String authorId) {
+		this.authorId = authorId;
+	}
+
 	public Drawable getImageDrawable() {
 		return imageDrawable;
 	}

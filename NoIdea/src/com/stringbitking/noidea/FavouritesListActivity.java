@@ -28,7 +28,7 @@ public class FavouritesListActivity extends FragmentActivityBuilder {
 
 	private void redirectIfUserIsNotLoggedIn() {
 		if (!User.getIsUserLoggedIn()) {
-			Intent intent = new Intent(this, LoginActivity.class);
+			Intent intent = new Intent(this, HomeActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 		}
@@ -54,13 +54,13 @@ public class FavouritesListActivity extends FragmentActivityBuilder {
 		switch (item.getItemId()) {
 
 		case R.id.menu_home:
-			intent = new Intent(this, LoginActivity.class);
+			intent = new Intent(this, HomeActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			isActivityCalled = true;
 			break;
 
 		case R.id.menu_search:
-			intent = new Intent(this, MainActivity.class);
+			intent = new Intent(this, SearchActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			isActivityCalled = true;
 			break;

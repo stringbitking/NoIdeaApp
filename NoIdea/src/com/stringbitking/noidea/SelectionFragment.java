@@ -13,6 +13,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.opengl.Visibility;
@@ -32,6 +35,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
+import com.stringbitking.noidea.models.Suggestion;
 import com.stringbitking.noidea.models.User;
 
 public class SelectionFragment extends Fragment {
@@ -133,13 +137,13 @@ public class SelectionFragment extends Fragment {
 	                	String userId = user.getId();
 	                	String userName =  user.getName();
 	                	
-	                	User.setId(userId);
+	                	User.setFacebookId(userId);
 	                	User.setName(userName);
 	                	User.setIsUserLoggedIn(true);
 	                	
 	                    // Set the id for the ProfilePictureView
 	                    // view that in turn displays the profile picture.
-	                    profilePictureView.setProfileId(User.getId());
+	                    profilePictureView.setProfileId(User.getFacebookId());
 	                    // Set the Textview's text to the user's name.
 	                    userNameView.setText(User.getName());
 	                    
@@ -178,7 +182,7 @@ public class SelectionFragment extends Fragment {
 
 			List<NameValuePair> content = new ArrayList<NameValuePair>(1);
 			content.add(new BasicNameValuePair("name", User.getName()));
-			String getUserUrl = Constants.USERS_URL + User.getId();
+			String getUserUrl = Constants.USERS_URL + User.getFacebookId();
 			
 			String result = HttpRequester.PostJSON(getUserUrl, content);
 			return result;
@@ -188,6 +192,16 @@ public class SelectionFragment extends Fragment {
 		protected void onPostExecute(String result) {
 
 			// TODO display user info in the activity
+			try {
+
+				JSONObject responseBody = new JSONObject(result);
+				User.setId(responseBody.getString("_id"));
+
+			} catch (JSONException e) {
+
+				e.printStackTrace();
+
+			}
 
 		}
 

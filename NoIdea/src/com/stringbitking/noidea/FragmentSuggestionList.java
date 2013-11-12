@@ -40,7 +40,7 @@ public class FragmentSuggestionList extends ListFragment {
 
 	private static String suggestionsUrl = Constants.SUGGESTIONS_URL;
 	private String categoryId;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,9 +48,9 @@ public class FragmentSuggestionList extends ListFragment {
 		getActivity().setTitle(R.string.fragment_suggestion_list_title);
 
 		categoryId = (String) getActivity().getIntent().getSerializableExtra(
-				MainActivity.CATEGORY_ID);
+				SearchActivity.CATEGORY_ID);
 		option = getArguments().getString(DISPLAY_OPTION);
-		
+
 		new GetSuggestionsJSON().execute(option);
 
 		// Setting up the adapter after executing the async operation
@@ -115,20 +115,21 @@ public class FragmentSuggestionList extends ListFragment {
 
 			TextView suggestionTitleTextView = (TextView) convertView
 					.findViewById(R.id.suggestionTitleTextView);
-
 			suggestionTitleTextView.setText(theSuggestion.getTitle());
 
 			TextView suggestionsDescriptionTextView = (TextView) convertView
 					.findViewById(R.id.suggestionDescriptionTextView);
-
 			suggestionsDescriptionTextView.setText(theSuggestion
 					.getDescription());
 
 			ImageView suggestionImageView = (ImageView) convertView
 					.findViewById(R.id.suggestionImageView);
-
 			suggestionImageView
 					.setImageDrawable(suggestionImages.get(position));
+
+			TextView suggestionAuthorTextView = (TextView) convertView
+					.findViewById(R.id.suggestionAuthorTextView);
+			suggestionAuthorTextView.setText(theSuggestion.getAuthor());
 
 			// Return the finished list item for display
 
@@ -193,11 +194,9 @@ public class FragmentSuggestionList extends ListFragment {
 			String option = params[0];
 			String result = "";
 			if (option == SINGLE_CATEGORY_OPTION) {
-				result = HttpRequester.GetJSON(suggestionsUrl
-						+ categoryId);
-			}
-			else {
-				String favUrl = Constants.FAVOURITE_URL + User.getId();
+				result = HttpRequester.GetJSON(suggestionsUrl + categoryId);
+			} else {
+				String favUrl = Constants.FAVOURITE_URL + User.getFacebookId();
 				result = HttpRequester.GetJSON(favUrl);
 			}
 
@@ -226,6 +225,12 @@ public class FragmentSuggestionList extends ListFragment {
 							.getString("title"));
 					currentSuggestion.setImage(suggestionJSON
 							.getString("image"));
+
+					JSONObject author = new JSONObject(
+							suggestionJSON.getString("_author"));
+					currentSuggestion.setAuthor(author.getString("username"));
+					currentSuggestion.setAuthorId(author.getString("_id"));
+
 					suggestionsList.add(currentSuggestion);
 
 				}

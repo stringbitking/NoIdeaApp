@@ -14,9 +14,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_launcher" />
-        
-        </TableRow>
-    
+    </TableRow>
+
     <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="wrap_content"
@@ -26,7 +25,6 @@
             android:id="@+id/fragmentSuggestionTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        
     </TableRow>
 
     <TableRow
@@ -38,7 +36,6 @@
             android:id="@+id/fragmentSuggestionDescriptionTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        
     </TableRow>
 
     <TableRow
@@ -50,9 +47,41 @@
             android:id="@+id/addToFavouritesButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Add to favourites"
-            android:onClick="onClickAddToFavourites" />
+            android:onClick="onClickAddToFavourites"
+            android:text="Add to favourites" />
+    </TableRow>
 
+    <TableRow
+        android:id="@+id/tableRow4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <RatingBar
+                android:id="@+id/indicatorRatingBar"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:stepSize="0.1" />
+        </LinearLayout>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/rateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rate" />
     </TableRow>
 
 </TableLayout>

@@ -19,8 +19,10 @@
 
             <ImageView
                 android:id="@+id/suggestionImageView"
-                android:layout_width="100dp"
-                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:src="@drawable/ic_launcher" />
         </TableLayout>
 
@@ -30,9 +32,33 @@
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:orientation="vertical" >
-
+            
             <TableRow
                 android:id="@+id/tableRow2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/suggestionTitleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+            </TableRow>
+            
+            <TableRow
+                android:id="@+id/tableRow3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/suggestionAuthorTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+            </TableRow>
+            
+            <TableRow
+                android:id="@+id/tableRow4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" >
 
@@ -43,17 +69,6 @@
                     android:text="TextView" />
             </TableRow>
 
-            <TableRow
-                android:id="@+id/tableRow1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:id="@+id/suggestionTitleTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TextView" />
-            </TableRow>
         </TableLayout>
     </TableRow>
 

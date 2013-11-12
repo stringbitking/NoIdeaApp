@@ -17,7 +17,7 @@ import com.facebook.UiLifecycleHelper;
 import com.stringbitking.noidea.actionbar.ActionBarFragmentActivity;
 import com.stringbitking.noidea.models.User;
 
-public class LoginActivity extends ActionBarFragmentActivity {
+public class HomeActivity extends ActionBarFragmentActivity {
 
 	private static final int SPLASH = 0;
 	private static final int SELECTION = 1;
@@ -95,7 +95,7 @@ public class LoginActivity extends ActionBarFragmentActivity {
 			break;
 
 		case R.id.menu_search:
-			intent = new Intent(this, MainActivity.class);
+			intent = new Intent(this, SearchActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			isActivityCalled = true;
 			break;
