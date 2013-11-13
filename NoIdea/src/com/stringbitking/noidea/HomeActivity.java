@@ -11,9 +11,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.facebook.FacebookException;
+import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.widget.WebDialog;
+import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.stringbitking.noidea.actionbar.ActionBarFragmentActivity;
 import com.stringbitking.noidea.models.User;
 
@@ -210,4 +214,6 @@ public class HomeActivity extends ActionBarFragmentActivity {
 		}
 	}
 
+	
+	
 }

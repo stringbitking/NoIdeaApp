@@ -21,7 +21,6 @@
             android:layout_height="wrap_content"
             android:text="@string/app_greeting"
             android:textSize="@dimen/dim_large_text" />
-
     </TableRow>
 
     <TableRow
@@ -31,26 +30,25 @@
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/text_row_vertical_margin"
+            android:layout_weight="1"
             android:text="@string/app_question_start"
             android:textSize="@dimen/dim_large_text" />
 
         <Spinner
             android:id="@+id/categoriesSpinner"
-            android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
-        
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_question_end"
             android:textSize="@dimen/dim_large_text" />
-
     </TableRow>
 
     <TableRow
@@ -59,6 +57,25 @@
         android:layout_height="@dimen/text_row_middle_height"
         android:layout_marginBottom="@dimen/text_row_vertical_margin" >
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Min rating:" />
+
+            <RatingBar
+                android:id="@+id/minRatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="0.5" />
+        </LinearLayout>
     </TableRow>
 
     <TableRow
@@ -67,15 +84,43 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/text_row_vertical_margin" >
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_weight="1"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/tell_me_button"
-            android:onClick="onClickTellMe" />
+            android:layout_weight="1"
+            android:orientation="vertical" >
 
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Max rating:" />
+
+            <RatingBar
+                android:id="@+id/maxRatingBar"
+                style="?android:attr/ratingBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="false"
+                android:rating="5"
+                android:numStars="5"
+                android:stepSize="0.5" />
+        </LinearLayout>
     </TableRow>
 
+    <TableRow
+        android:id="@+id/tableRow5"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/text_row_vertical_margin" >
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClickTellMe"
+            android:text="@string/tell_me_button" />
+    </TableRow>
 
 </TableLayout>

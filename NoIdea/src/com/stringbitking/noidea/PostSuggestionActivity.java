@@ -19,6 +19,8 @@ import com.stringbitking.noidea.models.User;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,10 +42,12 @@ public class PostSuggestionActivity extends ActionBarActivity {
 	public static final int MEDIA_TYPE_VIDEO = 2;
 
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+	private static final int LOAD_IMAGE_REQUEST_CODE = 101;
 	private Uri fileUri;
 
 	private static String createSuggestionUrl = Constants.CREATE_SUGGESTION_URL;
 	private Boolean isImageReady = false;
+	private Boolean isCameraImage = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +108,14 @@ public class PostSuggestionActivity extends ActionBarActivity {
 
 	}
 
+	public void onClickLoadPicture(View view) {
+		Intent i = new Intent(
+                Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+         
+        startActivityForResult(i, LOAD_IMAGE_REQUEST_CODE);
+	}
+	
 	public void onClickChangePicture(View view) {
 
 		// create Intent to take a picture and return control to the calling
@@ -127,6 +139,7 @@ public class PostSuggestionActivity extends ActionBarActivity {
 			if (resultCode == RESULT_OK) {
 
 				isImageReady = true;
+				isCameraImage = true;
 				ImageView imgView = (ImageView) findViewById(R.id.suggestionImageView);
 				imgView.setImageURI(fileUri);
 
@@ -137,6 +150,16 @@ public class PostSuggestionActivity extends ActionBarActivity {
 				// User cancelled the image capture
 			} else {
 				// Image capture failed, advise user
+			}
+		}
+		
+		if (requestCode == LOAD_IMAGE_REQUEST_CODE) {
+			if (resultCode == RESULT_OK) {
+				Uri selectedImage = data.getData();
+				fileUri = selectedImage;
+				isImageReady = true;
+				ImageView imgView = (ImageView) findViewById(R.id.suggestionImageView);
+				imgView.setImageURI(fileUri);
 			}
 		}
 
@@ -198,6 +221,27 @@ public class PostSuggestionActivity extends ActionBarActivity {
 				Toast.LENGTH_SHORT).show();
 
 	}
+	
+	public String getRealPathFromURI(Uri contentUri) {
+	    String res = null;
+	    String[] proj = { MediaStore.Images.Media.DATA };
+	    Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+	    if(cursor.moveToFirst()){;
+	       int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+	       res = cursor.getString(column_index);
+	    }
+	    cursor.close();
+	    return res;
+	}
+	
+	private String getPath(Uri contentUri) {
+		if(isCameraImage){
+			return contentUri.getPath();
+		}
+		else {
+			return getRealPathFromURI(contentUri);
+		}
+	}
 
 	private class CreateSuggestion extends AsyncTask<String, String, String> {
 
@@ -206,10 +250,10 @@ public class PostSuggestionActivity extends ActionBarActivity {
 			String title = params[0];
 			String description = params[1];
 			String categoryId = params[2];
-
-			File suggestionImage = new File(fileUri.getPath());
+			String path = getPath(fileUri);
+			File suggestionImage = new File(path);
 			FileBody imgBody = new FileBody(suggestionImage);
-
+			
 			HttpClient httpclient = new DefaultHttpClient();
 			HttpPost httppost = new HttpPost(createSuggestionUrl);
 
@@ -283,6 +327,9 @@ public class PostSuggestionActivity extends ActionBarActivity {
 			break;
 
 		case R.id.menu_favourite:
+			intent = new Intent(this, FavouritesListActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			isActivityCalled = true;
 			break;
 
 		}

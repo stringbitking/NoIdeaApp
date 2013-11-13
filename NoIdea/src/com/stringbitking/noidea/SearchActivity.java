@@ -30,17 +30,26 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
+import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SearchActivity extends ActionBarActivity {
 
 	public static final String CATEGORY_ID = "com.stringbitking.noidea.suggestion_id";
+	public static final String MIN_RATING = "com.stringbitking.noidea.min_rating";
+	public static final String MAX_RATING = "com.stringbitking.noidea.max_rating";
 
 	private static String categoriesUrl = Constants.CATEGORIES_URL;
 
 	private List<Category> categories;
+	RatingBar minRatingBar;
+	RatingBar maxRatingBar;
+	private Float currentMinRating;
+	private Float currentMaxRating;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,16 +57,58 @@ public class SearchActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_main);
 
 		new GetCategoriesJSON().execute();
+
+		minRatingBar = (RatingBar) findViewById(R.id.minRatingBar);
+		maxRatingBar = (RatingBar) findViewById(R.id.maxRatingBar);
+
+		minRatingBar
+				.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
+
+					@Override
+					public void onRatingChanged(RatingBar ratingBar,
+							float rating, boolean fromUser) {
+
+						if (rating >= maxRatingBar.getRating()) {
+							Toast.makeText(getBaseContext(),
+									"Min cannot be greater than max.",
+									Toast.LENGTH_SHORT).show();
+							ratingBar.setRating(currentMinRating);
+						}
+						else {
+							currentMinRating = rating;
+						}
+					}
+				});
+
+		maxRatingBar
+				.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
+
+					@Override
+					public void onRatingChanged(RatingBar ratingBar,
+							float rating, boolean fromUser) {
+						if(rating <= minRatingBar.getRating()) {
+							Toast.makeText(getBaseContext(),
+									"Min cannot be greater than max.",
+									Toast.LENGTH_SHORT).show();
+							ratingBar.setRating(currentMaxRating);
+						}
+						else {
+							currentMaxRating = rating;
+						}
+					}
+				});
 		
+		currentMinRating = 0f;
+		currentMaxRating = 5f;
 	}
 
 	private void loadCategories() {
 
 		Spinner spinner = (Spinner) findViewById(R.id.categoriesSpinner);
-		
-		CategoriesAdapter spinnerAdapter = new CategoriesAdapter(this, 
-					CategoriesProvider.get().getCategoriesList(), true);
-		
+
+		CategoriesAdapter spinnerAdapter = new CategoriesAdapter(this,
+				CategoriesProvider.get().getCategoriesList(), true);
+
 		spinner.setAdapter(spinnerAdapter);
 
 	}
@@ -75,18 +126,18 @@ public class SearchActivity extends ActionBarActivity {
 		protected void onPostExecute(String result) {
 
 			parseCategoriesJSON(result);
-			
+
 			CategoriesProvider categoriesProvider = CategoriesProvider.get();
 			categoriesProvider.update(categories);
-			
+
 			loadCategories();
 
 		}
 
 	}
-	
+
 	private void parseCategoriesJSON(String result) {
-		
+
 		try {
 
 			JSONArray arrResult = new JSONArray(result);
@@ -96,13 +147,13 @@ public class SearchActivity extends ActionBarActivity {
 			for (int i = 0; i < arrResult.length(); i++) {
 
 				JSONObject categoryJSON = arrResult.getJSONObject(i);
-				
+
 				Category cat = new Category();
 				cat.setId(categoryJSON.getString("_id"));
 				cat.setName(categoryJSON.getString("name"));
 				cat.setVerb(categoryJSON.getString("verb"));
 				categories.add(cat);
-				
+
 			}
 
 		} catch (JSONException e) {
@@ -110,23 +161,25 @@ public class SearchActivity extends ActionBarActivity {
 			e.printStackTrace();
 
 		}
-		
+
 	}
 
 	public void onClickTellMe(View view) {
 
 		Spinner spinner = (Spinner) findViewById(R.id.categoriesSpinner);
-		
+
 		Category selectedCategory = (Category) spinner.getSelectedItem();
 
 		Intent newIntent = new Intent(this, SuggestionsListActivity.class);
 
 		newIntent.putExtra(CATEGORY_ID, selectedCategory.getId());
+		newIntent.putExtra(MIN_RATING, currentMinRating);
+		newIntent.putExtra(MAX_RATING, currentMaxRating);
 
 		startActivity(newIntent);
 
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater menuInflater = getMenuInflater();
@@ -140,12 +193,12 @@ public class SearchActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
+
 		Boolean isActivityCalled = false;
 		Intent intent = new Intent();
 
 		switch (item.getItemId()) {
-		
+
 		case R.id.menu_home:
 			intent = new Intent(this, HomeActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -160,7 +213,7 @@ public class SearchActivity extends ActionBarActivity {
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			isActivityCalled = true;
 			break;
-			
+
 		case R.id.menu_favourite:
 			intent = new Intent(this, FavouritesListActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -168,8 +221,8 @@ public class SearchActivity extends ActionBarActivity {
 			break;
 
 		}
-		
-		if(isActivityCalled) {
+
+		if (isActivityCalled) {
 			startActivity(intent);
 		}
 

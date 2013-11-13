@@ -12,7 +12,16 @@ public class Suggestion {
 	private Drawable imageDrawable;
 	private String author;
 	private String authorId;
+	private Boolean isFavourite;
 	
+	public Boolean getIsFavourite() {
+		return isFavourite;
+	}
+
+	public void setIsFavourite(Boolean isFavourite) {
+		this.isFavourite = isFavourite;
+	}
+
 	public String getAuthor() {
 		return author;
 	}

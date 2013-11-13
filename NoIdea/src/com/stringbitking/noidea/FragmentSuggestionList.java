@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,6 +42,8 @@ public class FragmentSuggestionList extends ListFragment {
 
 	private static String suggestionsUrl = Constants.SUGGESTIONS_URL;
 	private String categoryId;
+	private Float minRating;
+	private Float maxRating;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,13 @@ public class FragmentSuggestionList extends ListFragment {
 		option = getArguments().getString(DISPLAY_OPTION);
 
 		new GetSuggestionsJSON().execute(option);
+
+		if (option == SINGLE_CATEGORY_OPTION) {
+			minRating = (Float) getActivity().getIntent().getSerializableExtra(
+					SearchActivity.MIN_RATING);
+			maxRating = (Float) getActivity().getIntent().getSerializableExtra(
+					SearchActivity.MAX_RATING);
+		}
 
 		// Setting up the adapter after executing the async operation
 
@@ -161,7 +172,7 @@ public class FragmentSuggestionList extends ListFragment {
 		protected String doInBackground(String... params) {
 
 			suggestionImages = new ArrayList<Drawable>();
-			String imagesUrl = "http://10.0.3.2:3000/images/";
+			String imagesUrl = Constants.SERVER_URL + "images/";
 
 			for (int i = 0; i < suggestionsList.size(); i++) {
 
@@ -194,7 +205,13 @@ public class FragmentSuggestionList extends ListFragment {
 			String option = params[0];
 			String result = "";
 			if (option == SINGLE_CATEGORY_OPTION) {
-				result = HttpRequester.GetJSON(suggestionsUrl + categoryId);
+				List<NameValuePair> content = new ArrayList<NameValuePair>();
+				content.add(new BasicNameValuePair("minRating", minRating
+						.toString()));
+				content.add(new BasicNameValuePair("maxRating", maxRating
+						.toString()));
+				result = HttpRequester.PostJSON(suggestionsUrl + "category/" + categoryId,
+						content);
 			} else {
 				String favUrl = Constants.FAVOURITE_URL + User.getFacebookId();
 				result = HttpRequester.GetJSON(favUrl);

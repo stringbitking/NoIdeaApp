@@ -102,5 +102,13 @@
             android:onClick="onClickCreateSuggestion"
             android:text="Create Suggestion" />
     </TableRow>
+    
+    <Button
+            android:id="@+id/button2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClickLoadPicture"
+            android:text="Load picture from gallery" />
 
 </TableLayout>
