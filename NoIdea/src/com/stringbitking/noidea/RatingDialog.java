@@ -9,6 +9,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.stringbitking.noidea.models.User;
+import com.stringbitking.noidea.network.HttpRequester;
+import com.stringbitking.noidea.network.HttpRequesterAsync;
+import com.stringbitking.noidea.network.IJSONHandler;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -18,11 +21,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
 
-public class RatingDialog extends Dialog {
+public class RatingDialog extends Dialog implements IJSONHandler {
 	public interface ReadyListener {
 		public void ready(String name);
 	}
 
+	private static final int SEND_VOTE_REQUEST_CODE = 1;
+	private static final int GET_VOTE_REQUEST_CODE = 2;
 	private String suggestionId;
 	private ReadyListener readyListener;
 	RatingBar ratestar;
@@ -42,70 +47,53 @@ public class RatingDialog extends Dialog {
 		Button buttonOK = (Button) findViewById(R.id.saveRatingButton);
 		buttonOK.setOnClickListener(new OKListener());
 		ratestar = (RatingBar) findViewById(R.id.ratingbar_default);
-		
-		new GetVoteAsync().execute();
+
+		getVote();
+	}
+	
+	private void getVote() {
+		String url = Constants.VOTE_URL + suggestionId;
+		List<NameValuePair> content = new ArrayList<NameValuePair>();
+		content.add(new BasicNameValuePair("facebookId", User
+				.getFacebookId()));
+		HttpRequesterAsync.postJSONAsync(this, content, GET_VOTE_REQUEST_CODE, url);
+	}
+
+	private void sendVote() {
+		String points = Float.toString(ratestar.getRating());
+		String url = Constants.SERVER_URL + "votes/create";
+		List<NameValuePair> content = new ArrayList<NameValuePair>();
+		content.add(new BasicNameValuePair("suggestionId", suggestionId));
+		content.add(new BasicNameValuePair("facebookId", User.getFacebookId()));
+		content.add(new BasicNameValuePair("points", points));
+		HttpRequesterAsync.postJSONAsync(this, content, SEND_VOTE_REQUEST_CODE, url);
 	}
 
 	private class OKListener implements android.view.View.OnClickListener {
 		public void onClick(View v) {
-			new SendVoteAsync().execute();
-			
+			sendVote();
 		}
 	}
-	
+
 	private void updateRating(Float rating) {
 		ratestar.setRating(rating);
 	}
-	
-	private class SendVoteAsync extends AsyncTask<String, String, String> {
 
-		protected String doInBackground(String... arg0) {
-
-			String points = ratestar.getRating() + "";
-			String url = Constants.SERVER_URL + "votes/create";
-			List<NameValuePair> content = new ArrayList<NameValuePair>();
-			content.add(new BasicNameValuePair("suggestionId", suggestionId));
-			content.add(new BasicNameValuePair("facebookId", User.getFacebookId()));
-			content.add(new BasicNameValuePair("points", points));
-			String result = HttpRequester.PostJSON(url, content);
-
-			return result;
-
-		}
-
-		protected void onPostExecute(String result) {
-
+	@Override
+	public void parseJSON(String json, int requestCode) {
+		if (requestCode == SEND_VOTE_REQUEST_CODE) {
 			readyListener.ready(String.valueOf(ratestar.getRating()));
 			RatingDialog.this.dismiss();
-
 		}
 
-	}
-	
-	private class GetVoteAsync extends AsyncTask<String, String, String> {
-
-		protected String doInBackground(String... arg0) {
-
-			String url = Constants.VOTE_URL + suggestionId;
-			List<NameValuePair> content = new ArrayList<NameValuePair>();
-			content.add(new BasicNameValuePair("facebookId", User.getFacebookId()));
-			String result = HttpRequester.PostJSON(url, content);
-
-			return result;
-
-		}
-
-		protected void onPostExecute(String result) {
-
+		if (requestCode == GET_VOTE_REQUEST_CODE) {
 			try {
-				JSONObject response = new JSONObject(result);
+				JSONObject response = new JSONObject(json);
 				String points = response.getString("points");
 				updateRating(Float.parseFloat(points));
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-
 		}
-
 	}
 }

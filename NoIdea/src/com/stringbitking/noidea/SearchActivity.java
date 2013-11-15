@@ -17,6 +17,9 @@ import org.json.JSONObject;
 
 import com.stringbitking.noidea.actionbar.ActionBarActivity;
 import com.stringbitking.noidea.models.Category;
+import com.stringbitking.noidea.network.HttpRequesterAsync;
+import com.stringbitking.noidea.network.IJSONHandler;
+import com.stringbitking.noidea.network.JSONParser;
 
 import android.app.Activity;
 import android.content.Context;
@@ -37,15 +40,12 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SearchActivity extends ActionBarActivity {
+public class SearchActivity extends ActionBarActivity implements IJSONHandler {
 
 	public static final String CATEGORY_ID = "com.stringbitking.noidea.suggestion_id";
 	public static final String MIN_RATING = "com.stringbitking.noidea.min_rating";
 	public static final String MAX_RATING = "com.stringbitking.noidea.max_rating";
 
-	private static String categoriesUrl = Constants.CATEGORIES_URL;
-
-	private List<Category> categories;
 	RatingBar minRatingBar;
 	RatingBar maxRatingBar;
 	private Float currentMinRating;
@@ -56,11 +56,15 @@ public class SearchActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		new GetCategoriesJSON().execute();
+		HttpRequesterAsync.getJSONAsync(this, Constants.CATEGORIES_URL);
 
 		minRatingBar = (RatingBar) findViewById(R.id.minRatingBar);
 		maxRatingBar = (RatingBar) findViewById(R.id.maxRatingBar);
 
+		setupRatingBars();
+	}
+
+	private void setupRatingBars() {
 		minRatingBar
 				.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
 
@@ -73,8 +77,7 @@ public class SearchActivity extends ActionBarActivity {
 									"Min cannot be greater than max.",
 									Toast.LENGTH_SHORT).show();
 							ratingBar.setRating(currentMinRating);
-						}
-						else {
+						} else {
 							currentMinRating = rating;
 						}
 					}
@@ -86,82 +89,19 @@ public class SearchActivity extends ActionBarActivity {
 					@Override
 					public void onRatingChanged(RatingBar ratingBar,
 							float rating, boolean fromUser) {
-						if(rating <= minRatingBar.getRating()) {
+						if (rating <= minRatingBar.getRating()) {
 							Toast.makeText(getBaseContext(),
 									"Min cannot be greater than max.",
 									Toast.LENGTH_SHORT).show();
 							ratingBar.setRating(currentMaxRating);
-						}
-						else {
+						} else {
 							currentMaxRating = rating;
 						}
 					}
 				});
-		
+
 		currentMinRating = 0f;
 		currentMaxRating = 5f;
-	}
-
-	private void loadCategories() {
-
-		Spinner spinner = (Spinner) findViewById(R.id.categoriesSpinner);
-
-		CategoriesAdapter spinnerAdapter = new CategoriesAdapter(this,
-				CategoriesProvider.get().getCategoriesList(), true);
-
-		spinner.setAdapter(spinnerAdapter);
-
-	}
-
-	private class GetCategoriesJSON extends AsyncTask<String, String, String> {
-
-		protected String doInBackground(String... arg0) {
-
-			String result = HttpRequester.GetJSON(categoriesUrl);
-
-			return result;
-
-		}
-
-		protected void onPostExecute(String result) {
-
-			parseCategoriesJSON(result);
-
-			CategoriesProvider categoriesProvider = CategoriesProvider.get();
-			categoriesProvider.update(categories);
-
-			loadCategories();
-
-		}
-
-	}
-
-	private void parseCategoriesJSON(String result) {
-
-		try {
-
-			JSONArray arrResult = new JSONArray(result);
-
-			categories = new ArrayList<Category>();
-
-			for (int i = 0; i < arrResult.length(); i++) {
-
-				JSONObject categoryJSON = arrResult.getJSONObject(i);
-
-				Category cat = new Category();
-				cat.setId(categoryJSON.getString("_id"));
-				cat.setName(categoryJSON.getString("name"));
-				cat.setVerb(categoryJSON.getString("verb"));
-				categories.add(cat);
-
-			}
-
-		} catch (JSONException e) {
-
-			e.printStackTrace();
-
-		}
-
 	}
 
 	public void onClickTellMe(View view) {
@@ -185,9 +125,6 @@ public class SearchActivity extends ActionBarActivity {
 		MenuInflater menuInflater = getMenuInflater();
 		menuInflater.inflate(R.menu.main, menu);
 
-		// Calling super after populating the menu is necessary here to ensure
-		// that the
-		// action bar helpers have a chance to handle this event.
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -227,6 +164,27 @@ public class SearchActivity extends ActionBarActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void loadCategories() {
+
+		Spinner spinner = (Spinner) findViewById(R.id.categoriesSpinner);
+
+		CategoriesAdapter spinnerAdapter = new CategoriesAdapter(this,
+				CategoriesProvider.get().getCategoriesList(), true);
+
+		spinner.setAdapter(spinnerAdapter);
+
+	}
+
+	@Override
+	public void parseJSON(String json, int requestCode) {
+		List<Category> categories = JSONParser.parseCategories(json);
+
+		CategoriesProvider categoriesProvider = CategoriesProvider.get();
+		categoriesProvider.update(categories);
+
+		loadCategories();
 	}
 
 }

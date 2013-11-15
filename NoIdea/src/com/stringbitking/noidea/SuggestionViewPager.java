@@ -26,6 +26,7 @@ import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.stringbitking.noidea.models.Suggestion;
 import com.stringbitking.noidea.models.User;
+import com.stringbitking.noidea.network.HttpRequester;
 
 public class SuggestionViewPager extends FragmentActivity {
 
@@ -149,6 +150,14 @@ public class SuggestionViewPager extends FragmentActivity {
 		}
 	}
 
+	public void toggleIsFlagged() {
+		if (currentSuggestion.getIsFlagged()) {
+			currentSuggestion.setIsFlagged(false);
+		} else {
+			currentSuggestion.setIsFlagged(true);
+		}
+	}
+
 	public void onClickAddToFavourites(View view) {
 		int position = theViewPager.getCurrentItem();
 		currentSuggestion = CurrentSuggestions.get(this).getSuggestionsList()
@@ -195,9 +204,6 @@ public class SuggestionViewPager extends FragmentActivity {
 				.getView();
 		ImageView favouriteImageView = (ImageView) currentPage
 				.findViewById(R.id.favouriteImageView);
-		TextView textView = (TextView) currentPage
-				.findViewById(R.id.fragmentSuggestionTitleTextView);
-		String text = textView.getText().toString();
 		Drawable drawable;
 		if (currentSuggestion.getIsFavourite()) {
 			drawable = getResources().getDrawable(R.drawable.heart);
@@ -207,21 +213,44 @@ public class SuggestionViewPager extends FragmentActivity {
 
 		favouriteImageView.setImageDrawable(drawable);
 	}
-	
-	public void onClickFlagSuggestion(View view) {
-		new FlagSuggestionAsync().execute();
+
+	private void updateFlaggedImage() {
+
+		String index = Integer.toString(theViewPager.getCurrentItem());
+		View currentPage = getSupportFragmentManager().findFragmentByTag(index)
+				.getView();
+		ImageView flagImageView = (ImageView) currentPage
+				.findViewById(R.id.flagImageView);
+		Drawable drawable;
+		if (currentSuggestion.getIsFlagged()) {
+			drawable = getResources().getDrawable(R.drawable.red_flag);
+		} else {
+			drawable = getResources().getDrawable(R.drawable.white_flag);
+		}
+
+		flagImageView.setImageDrawable(drawable);
 	}
 
-	private class FlagSuggestionAsync extends
-			AsyncTask<String, String, String> {
+	public void onClickFlagSuggestion(View view) {
+		int position = theViewPager.getCurrentItem();
+		currentSuggestion = CurrentSuggestions.get(this).getSuggestionsList()
+				.get(position);
+		if (!currentSuggestion.getIsFlagged()) {
+			new FlagSuggestionAsync().execute();
+		}
+	}
+
+	private class FlagSuggestionAsync extends AsyncTask<String, String, String> {
 
 		protected String doInBackground(String... arg0) {
 
 			int index = theViewPager.getCurrentItem();
 			currentSuggestion = suggestionsList.get(index);
 			String result;
-			String flagUrl = Constants.SERVER_URL + "flag/" + currentSuggestion.getId();
+			String flagUrl = Constants.SERVER_URL + "flag/"
+					+ currentSuggestion.getId();
 			List<NameValuePair> content = new ArrayList<NameValuePair>();
+			content.add(new BasicNameValuePair("facebookId", User.getFacebookId()));
 			result = HttpRequester.PostJSON(flagUrl, content);
 
 			return result;
@@ -229,7 +258,8 @@ public class SuggestionViewPager extends FragmentActivity {
 		}
 
 		protected void onPostExecute(String result) {
-
+			toggleIsFlagged();
+			updateFlaggedImage();
 		}
 
 	}

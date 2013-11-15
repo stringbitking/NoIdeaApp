@@ -1,4 +1,4 @@
-package com.stringbitking.noidea;
+package com.stringbitking.noidea.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;

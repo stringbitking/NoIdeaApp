@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import com.stringbitking.noidea.models.Suggestion;
 import com.stringbitking.noidea.models.User;
+import com.stringbitking.noidea.network.HttpRequester;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;

@@ -29,21 +29,25 @@ import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.stringbitking.noidea.models.Suggestion;
 import com.stringbitking.noidea.models.User;
+import com.stringbitking.noidea.network.HttpRequesterAsync;
+import com.stringbitking.noidea.network.IJSONHandler;
 
-public class SuggestionFragment extends Fragment {
+public class SuggestionFragment extends Fragment implements IJSONHandler {
 
 	public static final String SUGGESTION_ID = "com.example.pagersuggestions.suggestion_id";
-
+	private static final int RATING_REQUEST_CODE = 1;
+	private static final int FAVOURITE_REQUEST_CODE = 2;
 	private Suggestion suggestion;
 	public Boolean isFavourite;
+	public Boolean isFlagged;
 
 	private TextView fragmentSuggestionTitleTextView;
 	private TextView fragmentSuggestionDescriptionTextView;
 	private ImageView suggestionImageView;
+	private ImageView flagImageView;
 	private RatingBar indicatorRatingBar;
 	private Button rateButton;
 	private ImageView favouriteImageView;
-	
 
 	public static SuggestionFragment newSuggestionFragment(String suggestionId) {
 
@@ -90,6 +94,7 @@ public class SuggestionFragment extends Fragment {
 				.findViewById(R.id.fragmentSuggestionDescriptionTextView);
 		suggestionImageView = (ImageView) theView
 				.findViewById(R.id.suggestionImageView);
+		flagImageView = (ImageView) theView.findViewById(R.id.flagImageView);
 		indicatorRatingBar = (RatingBar) theView
 				.findViewById(R.id.indicatorRatingBar);
 		rateButton = (Button) theView.findViewById(R.id.rateButton);
@@ -108,49 +113,36 @@ public class SuggestionFragment extends Fragment {
 			}
 		});
 
-		new CheckFavouriteAsync().execute();
-		new GetRatingAsync().execute();
+		// new CheckFavouriteAsync().execute();
+		checkFavourite();
+		calculateRating();
 
 		return theView;
 
 	}
 
+	private void checkFavourite() {
+		List<NameValuePair> content = new ArrayList<NameValuePair>();
+		content.add(new BasicNameValuePair("facebookId", User.getFacebookId()));
+		content.add(new BasicNameValuePair("suggestionId", suggestion.getId()));
+		String url = Constants.FAVOURITE_URL + "check";
+		HttpRequesterAsync.postJSONAsync(this, content, FAVOURITE_REQUEST_CODE, url);
+	}
+
+	public void calculateRating() {
+		String ratingUrl = Constants.RATING_URL + suggestion.getId();
+		HttpRequesterAsync.getJSONAsync(this, RATING_REQUEST_CODE, ratingUrl);
+	}
+
 	private class OnReadyListener implements RatingDialog.ReadyListener {
 
 		public void ready(String name) {
-			new GetRatingAsync().execute();
+			calculateRating();
 		}
 	}
 
 	private void updateRating(Float newRating) {
 		indicatorRatingBar.setRating(newRating);
-
-	}
-
-	private class GetRatingAsync extends AsyncTask<String, String, String> {
-
-		protected String doInBackground(String... arg0) {
-
-			String result = HttpRequester.GetJSON(Constants.RATING_URL
-					+ suggestion.getId());
-
-			return result;
-
-		}
-
-		protected void onPostExecute(String result) {
-
-			try {
-				JSONObject response = new JSONObject(result);
-				String ratingStr = response.getString("rating");
-				Float ratingNum = Float.parseFloat(ratingStr);
-				updateRating(ratingNum);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-
-		}
-
 	}
 
 	private void updateFavouriteImage() {
@@ -163,43 +155,49 @@ public class SuggestionFragment extends Fragment {
 		}
 
 		favouriteImageView.setImageDrawable(drawable);
-	}
 
-	private class CheckFavouriteAsync extends AsyncTask<String, String, String> {
-
-		protected String doInBackground(String... arg0) {
-
-			List<NameValuePair> content = new ArrayList<NameValuePair>();
-			content.add(new BasicNameValuePair("facebookId", User
-					.getFacebookId()));
-			content.add(new BasicNameValuePair("suggestionId", suggestion
-					.getId()));
-			String result = HttpRequester.PostJSON(Constants.FAVOURITE_URL
-					+ "check", content);
-
-			return result;
-
+		if (isFlagged) {
+			drawable = getResources().getDrawable(R.drawable.red_flag);
+		} else {
+			drawable = getResources().getDrawable(R.drawable.white_flag);
 		}
 
-		protected void onPostExecute(String result) {
+		flagImageView.setImageDrawable(drawable);
+	}
 
+	@Override
+	public void parseJSON(String json, int requestCode) {
+		if (requestCode == RATING_REQUEST_CODE) {
 			try {
-				JSONObject response = new JSONObject(result);
+				JSONObject response = new JSONObject(json);
+				String ratingStr = response.getString("rating");
+				Float ratingNum = Float.parseFloat(ratingStr);
+				updateRating(ratingNum);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		if (requestCode == FAVOURITE_REQUEST_CODE) {
+			try {
+				JSONObject response = new JSONObject(json);
 				String isFavouriteStr = response.getString("isFavourite");
+				String isFlaggedStr = response.getString("isFlagged");
 				isFavourite = false;
+				isFlagged = false;
 				if (isFavouriteStr.equalsIgnoreCase("true")) {
 					isFavourite = true;
 				}
+				if (isFlaggedStr.equalsIgnoreCase("true")) {
+					isFlagged = true;
+				}
 				suggestion.setIsFavourite(isFavourite);
+				suggestion.setIsFlagged(isFlagged);
 				updateFavouriteImage();
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-
 		}
-
 	}
 
-	
-	
 }

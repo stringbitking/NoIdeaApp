@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -16,6 +17,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import com.stringbitking.noidea.actionbar.ActionBarActivity;
 import com.stringbitking.noidea.models.Category;
 import com.stringbitking.noidea.models.User;
+import com.stringbitking.noidea.network.HttpRequester;
+import com.stringbitking.noidea.network.HttpRequesterAsync;
+import com.stringbitking.noidea.network.IJSONHandler;
+import com.stringbitking.noidea.network.JSONParser;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -36,7 +41,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class PostSuggestionActivity extends ActionBarActivity {
+public class PostSuggestionActivity extends ActionBarActivity implements IJSONHandler {
 
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
@@ -55,8 +60,6 @@ public class PostSuggestionActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_post_suggestion);
 
 		redirectIfUserIsNotLoggedIn();
-		loadCategories();
-
 	}
 
 	@Override
@@ -70,6 +73,9 @@ public class PostSuggestionActivity extends ActionBarActivity {
 			Intent intent = new Intent(this, HomeActivity.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
+		}
+		else {
+			HttpRequesterAsync.getJSONAsync(this, Constants.CATEGORIES_URL);
 		}
 	}
 
@@ -339,6 +345,17 @@ public class PostSuggestionActivity extends ActionBarActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	
+	@Override
+	public void parseJSON(String json, int requestCode) {
+		List<Category> categories = JSONParser.parseCategories(json);
+
+		CategoriesProvider categoriesProvider = CategoriesProvider.get();
+		categoriesProvider.update(categories);
+
+		loadCategories();
 	}
 
 }

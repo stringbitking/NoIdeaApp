@@ -5,8 +5,15 @@ public class User {
 	private static String id;
 	private static String facebookId;
 	private static String name;
+	private static int points;
 	private static Boolean isUserLoggedIn = false;
 	
+	public static int getPoints() {
+		return points;
+	}
+	public static void setPoints(int points) {
+		User.points = points;
+	}
 	public static String getId() {
 		return id;
 	}

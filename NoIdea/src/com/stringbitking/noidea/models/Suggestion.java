@@ -13,7 +13,16 @@ public class Suggestion {
 	private String author;
 	private String authorId;
 	private Boolean isFavourite;
+	private Boolean isFlagged;
 	
+	public Boolean getIsFlagged() {
+		return isFlagged;
+	}
+
+	public void setIsFlagged(Boolean isFlagged) {
+		this.isFlagged = isFlagged;
+	}
+
 	public Boolean getIsFavourite() {
 		return isFavourite;
 	}

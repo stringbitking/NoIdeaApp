@@ -37,6 +37,7 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
 import com.stringbitking.noidea.models.Suggestion;
 import com.stringbitking.noidea.models.User;
+import com.stringbitking.noidea.network.HttpRequester;
 
 public class SelectionFragment extends Fragment {
 
@@ -45,6 +46,7 @@ public class SelectionFragment extends Fragment {
 
 	private ProfilePictureView profilePictureView;
 	private TextView userNameView;
+	private TextView pointsTextView;
 	
 	private UiLifecycleHelper uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -66,7 +68,8 @@ public class SelectionFragment extends Fragment {
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		View view = inflater.inflate(R.layout.selection, container, false);
-
+		
+		pointsTextView = (TextView) view.findViewById(R.id.pointsTextView);
 		// Find the user's profile picture custom view
 		profilePictureView = (ProfilePictureView) view
 				.findViewById(R.id.selection_profile_pic);
@@ -175,6 +178,12 @@ public class SelectionFragment extends Fragment {
 	    	
 	    }
 	}
+	
+	private void updateLayout() {
+		int points = User.getPoints();
+		String pointsStr = Integer.toString(points);
+		pointsTextView.setText(pointsStr);
+	}
 
 	private class GetUserInformation extends AsyncTask<String, String, String> {
 
@@ -191,12 +200,12 @@ public class SelectionFragment extends Fragment {
 
 		protected void onPostExecute(String result) {
 
-			// TODO display user info in the activity
 			try {
 
 				JSONObject responseBody = new JSONObject(result);
 				User.setId(responseBody.getString("_id"));
-
+				User.setPoints(responseBody.getInt("points"));
+				updateLayout();
 			} catch (JSONException e) {
 
 				e.printStackTrace();
@@ -204,6 +213,8 @@ public class SelectionFragment extends Fragment {
 			}
 
 		}
+
+		
 
 	}
 	
