@@ -161,9 +161,6 @@ public class SuggestionViewPager extends FragmentActivity {
 
 		protected String doInBackground(String... arg0) {
 
-			// int position = theViewPager.getCurrentItem();
-			// Suggestion suggestion = CurrentSuggestions.get();
-
 			List<NameValuePair> content = new ArrayList<NameValuePair>(2);
 			content.add(new BasicNameValuePair("suggestionId",
 					currentSuggestion.getId()));
@@ -192,9 +189,10 @@ public class SuggestionViewPager extends FragmentActivity {
 	}
 
 	private void updateFavouriteImage() {
-		
+
 		String index = Integer.toString(theViewPager.getCurrentItem());
-		View currentPage = getSupportFragmentManager().findFragmentByTag(index).getView();
+		View currentPage = getSupportFragmentManager().findFragmentByTag(index)
+				.getView();
 		ImageView favouriteImageView = (ImageView) currentPage
 				.findViewById(R.id.favouriteImageView);
 		TextView textView = (TextView) currentPage
@@ -210,66 +208,91 @@ public class SuggestionViewPager extends FragmentActivity {
 		favouriteImageView.setImageDrawable(drawable);
 	}
 	
-	private void publishFeedDialog() {
-	    Bundle params = new Bundle();
-	    int index = theViewPager.getCurrentItem();
-	    currentSuggestion = suggestionsList.get(index);
-	    String title = currentSuggestion.getTitle();
-	    String description = currentSuggestion.getDescription();
-//	    String imageUrl = Constants.SERVER_URL + "images/" + currentSuggestion.getImage();
-	    String imageUrl = "http://stringbitking.hostbg.net/wp-content/uploads/2013/03/ClassDiagram.png";
-	    params.putString("name", title);
-	    params.putString("caption", "Lets watch.");
-	    params.putString("description", description);
-	    params.putString("link", "https://developers.facebook.com/android");
-//	    params.putString("picture", "https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png");
-	    params.putString("picture", imageUrl);
-
-	    WebDialog feedDialog = (
-	        new WebDialog.FeedDialogBuilder(this,
-	            Session.getActiveSession(),
-	            params))
-	        .setOnCompleteListener(new OnCompleteListener() {
-
-	            @Override
-	            public void onComplete(Bundle values,
-	                FacebookException error) {
-	                if (error == null) {
-	                    // When the story is posted, echo the success
-	                    // and the post Id.
-	                    final String postId = values.getString("post_id");
-	                    if (postId != null) {
-	                        Toast.makeText(getApplicationContext(),
-	                            "Posted story, id: "+postId,
-	                            Toast.LENGTH_SHORT).show();
-	                    } else {
-	                        // User clicked the Cancel button
-	                        Toast.makeText(getApplicationContext(), 
-	                            "Publish cancelled", 
-	                            Toast.LENGTH_SHORT).show();
-	                    }
-	                } else if (error instanceof FacebookOperationCanceledException) {
-	                    // User clicked the "x" button
-	                    Toast.makeText(getApplicationContext(), 
-	                        "Publish cancelled", 
-	                        Toast.LENGTH_SHORT).show();
-	                } else {
-	                    // Generic, ex: network error
-	                    Toast.makeText(getApplicationContext(), 
-	                        "Error posting story", 
-	                        Toast.LENGTH_SHORT).show();
-	                }
-	            }
-
-	        })
-	        .build();
-	    feedDialog.show();
+	public void onClickFlagSuggestion(View view) {
+		new FlagSuggestionAsync().execute();
 	}
-	
+
+	private class FlagSuggestionAsync extends
+			AsyncTask<String, String, String> {
+
+		protected String doInBackground(String... arg0) {
+
+			int index = theViewPager.getCurrentItem();
+			currentSuggestion = suggestionsList.get(index);
+			String result;
+			String flagUrl = Constants.SERVER_URL + "flag/" + currentSuggestion.getId();
+			List<NameValuePair> content = new ArrayList<NameValuePair>();
+			result = HttpRequester.PostJSON(flagUrl, content);
+
+			return result;
+
+		}
+
+		protected void onPostExecute(String result) {
+
+		}
+
+	}
+
+	private void publishFeedDialog() {
+		Bundle params = new Bundle();
+		int index = theViewPager.getCurrentItem();
+		currentSuggestion = suggestionsList.get(index);
+		String title = currentSuggestion.getTitle();
+		String description = currentSuggestion.getDescription();
+		// String imageUrl = Constants.SERVER_URL + "images/" +
+		// currentSuggestion.getImage();
+		String imageUrl = "http://stringbitking.hostbg.net/wp-content/uploads/2013/03/ClassDiagram.png";
+		params.putString("name", title);
+		params.putString("caption", "Lets watch.");
+		params.putString("description", description);
+		params.putString("link", "https://developers.facebook.com/android");
+		// params.putString("picture",
+		// "https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png");
+		params.putString("picture", imageUrl);
+
+		WebDialog feedDialog = (new WebDialog.FeedDialogBuilder(this,
+				Session.getActiveSession(), params)).setOnCompleteListener(
+				new OnCompleteListener() {
+
+					@Override
+					public void onComplete(Bundle values,
+							FacebookException error) {
+						if (error == null) {
+							// When the story is posted, echo the success
+							// and the post Id.
+							final String postId = values.getString("post_id");
+							if (postId != null) {
+								Toast.makeText(getApplicationContext(),
+										"Posted story, id: " + postId,
+										Toast.LENGTH_SHORT).show();
+							} else {
+								// User clicked the Cancel button
+								Toast.makeText(getApplicationContext(),
+										"Publish cancelled", Toast.LENGTH_SHORT)
+										.show();
+							}
+						} else if (error instanceof FacebookOperationCanceledException) {
+							// User clicked the "x" button
+							Toast.makeText(getApplicationContext(),
+									"Publish cancelled", Toast.LENGTH_SHORT)
+									.show();
+						} else {
+							// Generic, ex: network error
+							Toast.makeText(getApplicationContext(),
+									"Error posting story", Toast.LENGTH_SHORT)
+									.show();
+						}
+					}
+
+				}).build();
+		feedDialog.show();
+	}
+
 	public void onClickShareSomething(View view) {
-		
+
 		publishFeedDialog();
-		
+
 	}
 
 }

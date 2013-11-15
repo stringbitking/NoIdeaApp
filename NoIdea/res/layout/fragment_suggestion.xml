@@ -39,8 +39,16 @@
                 android:id="@+id/shareImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_action_share"
-                android:onClick="onClickShareSomething" />
+                android:onClick="onClickShareSomething"
+                android:src="@drawable/ic_action_share" />
+
+            <Button
+                android:id="@+id/flagButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Flag"
+                android:onClick="onClickFlagSuggestion" />
         </LinearLayout>
     </TableRow>
 
@@ -100,5 +108,5 @@
             android:layout_weight="1"
             android:text="Rate" />
     </TableRow>
-    
+
 </TableLayout>
