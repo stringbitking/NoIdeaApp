@@ -7,7 +7,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,7 +15,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.FacebookException;
@@ -26,7 +24,6 @@ import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.stringbitking.noidea.models.Suggestion;
 import com.stringbitking.noidea.models.User;
-import com.stringbitking.noidea.network.HttpRequester;
 import com.stringbitking.noidea.network.HttpRequesterAsync;
 import com.stringbitking.noidea.network.IJSONHandler;
 
@@ -50,12 +47,9 @@ public class SuggestionViewPager extends FragmentActivity implements
 		theViewPager.setId(R.id.viewPager);
 
 		// Set the current View for the ViewPager
-
 		setContentView(theViewPager);
 
 		suggestionsList = CurrentSuggestions.get(this).getSuggestionsList();
-
-		// The FragmentManager ads Fragments to Activity views
 
 		FragmentManager fragManager = getSupportFragmentManager();
 
@@ -63,20 +57,10 @@ public class SuggestionViewPager extends FragmentActivity implements
 
 			@Override
 			public Fragment getItem(int position) {
-
-				// Gets the specific Suggestion from the right position
-				// in the ArrayList
-
 				Suggestion theSuggestion = suggestionsList.get(position);
-
-				// Return a SuggestionFragment by retrieving the id
-				// number from the current Suggestion
-
 				SuggestionFragment result = (SuggestionFragment) SuggestionFragment
 						.newSuggestionFragment(theSuggestion.getId());
-				Bundle args = result.getArguments();
-				String suggestionId = (String) args
-						.getSerializable(SuggestionFragment.SUGGESTION_ID);
+
 				getSupportFragmentManager().beginTransaction()
 						.add(result, Integer.toString(position)).commit();
 
@@ -84,28 +68,21 @@ public class SuggestionViewPager extends FragmentActivity implements
 
 			}
 
-			// Returns the number of items in the ArrayList
-
-			// @Override
-			// public Object instantiateItem(ViewGroup container, int position)
-			// {
-			// Fragment item = getItem(position);
-			// container.addView(item, position);
-			// return item;
-			// }
-
 			@Override
 			public int getCount() {
 				return suggestionsList.size();
 			}
 
 		});
-
+		
+		setupViewPager();
+	}
+	
+	private void setupViewPager() {
 		String suggestionId = (String) getIntent().getSerializableExtra(
 				SuggestionFragment.SUGGESTION_ID);
 
 		// Cycle through the Suggestions in the ArrayList to find a match
-		// Set the current position of the match in setCurrentItem
 
 		for (int i = 0; i < suggestionsList.size(); i++) {
 			if (suggestionsList.get(i).getId().equals(suggestionId)) {
@@ -125,16 +102,13 @@ public class SuggestionViewPager extends FragmentActivity implements
 					@Override
 					public void onPageScrolled(int arg0, float arg1, int arg2) {
 						// TODO Auto-generated method stub
-
 					}
 
 					@Override
 					public void onPageScrollStateChanged(int arg0) {
 						// TODO Auto-generated method stub
-
 					}
 				});
-
 	}
 
 	public void toggleIsFavourite() {

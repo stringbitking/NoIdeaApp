@@ -1,31 +1,21 @@
 package com.stringbitking.noidea;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
-import android.opengl.Visibility;
-import android.os.AsyncTask;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.Request;
@@ -35,20 +25,20 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
-import com.stringbitking.noidea.models.Suggestion;
 import com.stringbitking.noidea.models.User;
-import com.stringbitking.noidea.network.HttpRequester;
 import com.stringbitking.noidea.network.HttpRequesterAsync;
 import com.stringbitking.noidea.network.IJSONHandler;
 
 public class SelectionFragment extends Fragment implements IJSONHandler {
 
 	private static final int REAUTH_ACTIVITY_CODE = 100;
-	private static final String TAG = "SelectionFragment";
 
 	private ProfilePictureView profilePictureView;
 	private TextView userNameView;
 	private TextView pointsTextView;
+	private ImageView rankImageView;
+	private TextView pointsRankTextView;
+	private TextView rankNameTextView;
 	
 	private UiLifecycleHelper uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -76,7 +66,11 @@ public class SelectionFragment extends Fragment implements IJSONHandler {
 		profilePictureView = (ProfilePictureView) view
 				.findViewById(R.id.selection_profile_pic);
 		profilePictureView.setCropped(true);
-
+		
+		pointsRankTextView = (TextView) view.findViewById(R.id.pointsRankTextView);
+		rankImageView = (ImageView) view.findViewById(R.id.rankImageView);
+		rankNameTextView = (TextView) view.findViewById(R.id.rankNameTextView);
+		
 		// Find the user's name view
 		userNameView = (TextView) view.findViewById(R.id.selection_user_name);
 		
@@ -192,6 +186,15 @@ public class SelectionFragment extends Fragment implements IJSONHandler {
 		int points = User.getPoints();
 		String pointsStr = Integer.toString(points);
 		pointsTextView.setText(pointsStr);
+		
+		Drawable rankDrawable = Rank.getDrawable(getActivity(), points);
+		rankImageView.setImageDrawable(rankDrawable);
+		
+		int nextRankPoints = Rank.getNextRankPoints(points);
+		pointsRankTextView.setText(Integer.toString(nextRankPoints));
+		
+		String rankName = Rank.getRankName(points);
+		rankNameTextView.setText(rankName);
 	}
 
 	@Override

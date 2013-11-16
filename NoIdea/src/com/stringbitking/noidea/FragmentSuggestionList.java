@@ -1,10 +1,6 @@
 package com.stringbitking.noidea;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +13,8 @@ import org.json.JSONObject;
 
 import com.stringbitking.noidea.models.Suggestion;
 import com.stringbitking.noidea.models.User;
-import com.stringbitking.noidea.network.HttpRequester;
+import com.stringbitking.noidea.network.HttpRequesterAsync;
+import com.stringbitking.noidea.network.IJSONHandler;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -31,7 +28,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class FragmentSuggestionList extends ListFragment {
+public class FragmentSuggestionList extends ListFragment implements IJSONHandler {
 
 	private String option;
 	private List<Suggestion> suggestionsList;
@@ -56,8 +53,7 @@ public class FragmentSuggestionList extends ListFragment {
 				SearchActivity.CATEGORY_ID);
 		option = getArguments().getString(DISPLAY_OPTION);
 
-		new GetSuggestionsJSON().execute(option);
-
+		
 		if (option == SINGLE_CATEGORY_OPTION) {
 			minRating = (Float) getActivity().getIntent().getSerializableExtra(
 					SearchActivity.MIN_RATING);
@@ -66,7 +62,7 @@ public class FragmentSuggestionList extends ListFragment {
 		}
 
 		// Setting up the adapter after executing the async operation
-
+		getSuggestions(option);
 	}
 
 	private void setAdapter() {
@@ -198,71 +194,60 @@ public class FragmentSuggestionList extends ListFragment {
 		}
 
 	}
-
-	private class GetSuggestionsJSON extends AsyncTask<String, String, String> {
-
-		protected String doInBackground(String... params) {
-
-			String option = params[0];
-			String result = "";
-			if (option == SINGLE_CATEGORY_OPTION) {
-				List<NameValuePair> content = new ArrayList<NameValuePair>();
-				content.add(new BasicNameValuePair("minRating", minRating
-						.toString()));
-				content.add(new BasicNameValuePair("maxRating", maxRating
-						.toString()));
-				result = HttpRequester.PostJSON(suggestionsUrl + "category/" + categoryId,
-						content);
-			} else {
-				String favUrl = Constants.FAVOURITE_URL + User.getFacebookId();
-				result = HttpRequester.GetJSON(favUrl);
-			}
-
-			return result;
-
+	
+	private void getSuggestions(String option) {
+		if (option == SINGLE_CATEGORY_OPTION) {
+			List<NameValuePair> content = new ArrayList<NameValuePair>();
+			content.add(new BasicNameValuePair("minRating", minRating
+					.toString()));
+			content.add(new BasicNameValuePair("maxRating", maxRating
+					.toString()));
+			String url = suggestionsUrl + "category/" + categoryId;
+			HttpRequesterAsync.postJSONAsync(this, content, url);
+		} else {
+			String favUrl = Constants.FAVOURITE_URL + User.getFacebookId();
+			HttpRequesterAsync.getJSONAsync(this, favUrl);
 		}
+	}
 
-		protected void onPostExecute(String result) {
+	@Override
+	public void parseJSON(String json, int requestCode) {
+		try {
 
-			try {
+			suggestionsList = new ArrayList<Suggestion>();
+			JSONArray arrResult = new JSONArray(json);
 
-				suggestionsList = new ArrayList<Suggestion>();
-				JSONArray arrResult = new JSONArray(result);
+			for (int i = 0; i < arrResult.length(); i++) {
 
-				for (int i = 0; i < arrResult.length(); i++) {
+				JSONObject suggestionJSON = arrResult.getJSONObject(i);
 
-					JSONObject suggestionJSON = arrResult.getJSONObject(i);
+				Suggestion currentSuggestion = new Suggestion();
+				currentSuggestion.setId(suggestionJSON.getString("_id"));
+				currentSuggestion.setCategory(suggestionJSON
+						.getString("_category"));
+				currentSuggestion.setDescription(suggestionJSON
+						.getString("description"));
+				currentSuggestion.setTitle(suggestionJSON
+						.getString("title"));
+				currentSuggestion.setImage(suggestionJSON
+						.getString("image"));
 
-					Suggestion currentSuggestion = new Suggestion();
-					currentSuggestion.setId(suggestionJSON.getString("_id"));
-					currentSuggestion.setCategory(suggestionJSON
-							.getString("_category"));
-					currentSuggestion.setDescription(suggestionJSON
-							.getString("description"));
-					currentSuggestion.setTitle(suggestionJSON
-							.getString("title"));
-					currentSuggestion.setImage(suggestionJSON
-							.getString("image"));
+				JSONObject author = new JSONObject(
+						suggestionJSON.getString("_author"));
+				currentSuggestion.setAuthor(author.getString("username"));
+				currentSuggestion.setAuthorId(author.getString("_id"));
 
-					JSONObject author = new JSONObject(
-							suggestionJSON.getString("_author"));
-					currentSuggestion.setAuthor(author.getString("username"));
-					currentSuggestion.setAuthorId(author.getString("_id"));
-
-					suggestionsList.add(currentSuggestion);
-
-				}
-
-			} catch (JSONException e) {
-
-				e.printStackTrace();
+				suggestionsList.add(currentSuggestion);
 
 			}
 
-			new LoadSuggestionImages().execute();
+		} catch (JSONException e) {
+
+			e.printStackTrace();
 
 		}
 
+		new LoadSuggestionImages().execute();
 	}
 
 }

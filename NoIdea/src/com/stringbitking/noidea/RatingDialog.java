@@ -9,13 +9,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.stringbitking.noidea.models.User;
-import com.stringbitking.noidea.network.HttpRequester;
 import com.stringbitking.noidea.network.HttpRequesterAsync;
 import com.stringbitking.noidea.network.IJSONHandler;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;

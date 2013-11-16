@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.stringbitking.noidea.models.Category;
 
-import android.content.Context;
-
 public class CategoriesProvider {
 	
 	private static CategoriesProvider categoriesProvider;

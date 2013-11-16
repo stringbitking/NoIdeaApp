@@ -9,7 +9,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,16 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.facebook.FacebookException;
-import com.facebook.FacebookOperationCanceledException;
-import com.facebook.Session;
-import com.facebook.UiLifecycleHelper;
-import com.facebook.widget.WebDialog;
-import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.stringbitking.noidea.models.Suggestion;
 import com.stringbitking.noidea.models.User;
 import com.stringbitking.noidea.network.HttpRequesterAsync;
@@ -88,18 +81,13 @@ public class SuggestionFragment extends Fragment implements IJSONHandler {
 		View theView = inflater.inflate(R.layout.fragment_suggestion,
 				container, false);
 
-		fragmentSuggestionTitleTextView = (TextView) theView
-				.findViewById(R.id.fragmentSuggestionTitleTextView);
-		fragmentSuggestionDescriptionTextView = (TextView) theView
-				.findViewById(R.id.fragmentSuggestionDescriptionTextView);
-		suggestionImageView = (ImageView) theView
-				.findViewById(R.id.suggestionImageView);
-		flagImageView = (ImageView) theView.findViewById(R.id.flagImageView);
-		indicatorRatingBar = (RatingBar) theView
-				.findViewById(R.id.indicatorRatingBar);
-		rateButton = (Button) theView.findViewById(R.id.rateButton);
-		favouriteImageView = (ImageView) theView
-				.findViewById(R.id.favouriteImageView);
+		if (!User.getIsUserLoggedIn()) {
+			LinearLayout actionBarBottomLayout = (LinearLayout) theView
+					.findViewById(R.id.bottomActionBarLinearLayout);
+			actionBarBottomLayout.setVisibility(View.INVISIBLE);
+		}
+		
+		loadViews(theView);
 
 		fragmentSuggestionTitleTextView.setText(suggestion.getTitle());
 		fragmentSuggestionDescriptionTextView.setText(suggestion
@@ -113,7 +101,6 @@ public class SuggestionFragment extends Fragment implements IJSONHandler {
 			}
 		});
 
-		// new CheckFavouriteAsync().execute();
 		checkFavourite();
 		calculateRating();
 
@@ -121,12 +108,28 @@ public class SuggestionFragment extends Fragment implements IJSONHandler {
 
 	}
 
+	private void loadViews(View theView) {
+		fragmentSuggestionTitleTextView = (TextView) theView
+				.findViewById(R.id.fragmentSuggestionTitleTextView);
+		fragmentSuggestionDescriptionTextView = (TextView) theView
+				.findViewById(R.id.fragmentSuggestionDescriptionTextView);
+		suggestionImageView = (ImageView) theView
+				.findViewById(R.id.suggestionImageView);
+		flagImageView = (ImageView) theView.findViewById(R.id.flagImageView);
+		indicatorRatingBar = (RatingBar) theView
+				.findViewById(R.id.indicatorRatingBar);
+		rateButton = (Button) theView.findViewById(R.id.rateButton);
+		favouriteImageView = (ImageView) theView
+				.findViewById(R.id.favouriteImageView);
+	}
+
 	private void checkFavourite() {
 		List<NameValuePair> content = new ArrayList<NameValuePair>();
 		content.add(new BasicNameValuePair("facebookId", User.getFacebookId()));
 		content.add(new BasicNameValuePair("suggestionId", suggestion.getId()));
 		String url = Constants.FAVOURITE_URL + "check";
-		HttpRequesterAsync.postJSONAsync(this, content, FAVOURITE_REQUEST_CODE, url);
+		HttpRequesterAsync.postJSONAsync(this, content, FAVOURITE_REQUEST_CODE,
+				url);
 	}
 
 	public void calculateRating() {
@@ -177,7 +180,7 @@ public class SuggestionFragment extends Fragment implements IJSONHandler {
 				e.printStackTrace();
 			}
 		}
-		
+
 		if (requestCode == FAVOURITE_REQUEST_CODE) {
 			try {
 				JSONObject response = new JSONObject(json);

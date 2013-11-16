@@ -17,15 +17,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import com.stringbitking.noidea.actionbar.ActionBarActivity;
 import com.stringbitking.noidea.models.Category;
 import com.stringbitking.noidea.models.User;
-import com.stringbitking.noidea.network.HttpRequester;
 import com.stringbitking.noidea.network.HttpRequesterAsync;
 import com.stringbitking.noidea.network.IJSONHandler;
 import com.stringbitking.noidea.network.JSONParser;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -53,11 +50,19 @@ public class PostSuggestionActivity extends ActionBarActivity implements IJSONHa
 	private static String createSuggestionUrl = Constants.CREATE_SUGGESTION_URL;
 	private Boolean isImageReady = false;
 	private Boolean isCameraImage = false;
+	
+	private EditText titleEditText;
+	private EditText descriptionEditText;
+	private Spinner categoriesSpinner;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post_suggestion);
+		
+		titleEditText = (EditText) findViewById(R.id.titleEditText);
+		descriptionEditText = (EditText) findViewById(R.id.descriptionEditText);
+		categoriesSpinner = (Spinner) findViewById(R.id.categoriesSpinner);
 
 		redirectIfUserIsNotLoggedIn();
 	}
@@ -80,38 +85,25 @@ public class PostSuggestionActivity extends ActionBarActivity implements IJSONHa
 	}
 
 	private void loadCategories() {
-
-		Spinner spinner = (Spinner) findViewById(R.id.categoriesSpinner);
-
 		CategoriesAdapter spinnerAdapter = new CategoriesAdapter(this,
 				CategoriesProvider.get().getCategoriesList(), false);
-
-		spinner.setAdapter(spinnerAdapter);
-
+		categoriesSpinner.setAdapter(spinnerAdapter);
 	}
 
 	public void onClickCreateSuggestion(View view) {
-
-		EditText titleEditText = (EditText) findViewById(R.id.titleEditText);
-		EditText descriptionEditText = (EditText) findViewById(R.id.descriptionEditText);
-		Spinner categoriesSpinner = (Spinner) findViewById(R.id.categoriesSpinner);
-
 		String title = titleEditText.getText().toString();
 		String description = descriptionEditText.getText().toString();
 		String categoryId = ((Category) categoriesSpinner.getSelectedItem())
 				.getId();
 
 		if (title.length() > 0 && description.length() > 0 && isImageReady) {
-
 			new CreateSuggestion().execute(title, description, categoryId);
-
 		} else {
 
 			Toast.makeText(getBaseContext(), "All fields are required.",
 					Toast.LENGTH_SHORT).show();
 
 		}
-
 	}
 
 	public void onClickLoadPicture(View view) {
@@ -347,7 +339,6 @@ public class PostSuggestionActivity extends ActionBarActivity implements IJSONHa
 		return super.onOptionsItemSelected(item);
 	}
 
-	
 	@Override
 	public void parseJSON(String json, int requestCode) {
 		List<Category> categories = JSONParser.parseCategories(json);
