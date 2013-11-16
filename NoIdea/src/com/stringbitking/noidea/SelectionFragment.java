@@ -38,8 +38,10 @@ import com.facebook.widget.ProfilePictureView;
 import com.stringbitking.noidea.models.Suggestion;
 import com.stringbitking.noidea.models.User;
 import com.stringbitking.noidea.network.HttpRequester;
+import com.stringbitking.noidea.network.HttpRequesterAsync;
+import com.stringbitking.noidea.network.IJSONHandler;
 
-public class SelectionFragment extends Fragment {
+public class SelectionFragment extends Fragment implements IJSONHandler {
 
 	private static final int REAUTH_ACTIVITY_CODE = 100;
 	private static final String TAG = "SelectionFragment";
@@ -150,7 +152,7 @@ public class SelectionFragment extends Fragment {
 	                    // Set the Textview's text to the user's name.
 	                    userNameView.setText(User.getName());
 	                    
-	                    new GetUserInformation().execute();
+	                    getUserInformation();
 	                }
 	            }
 	            if (response.getError() != null) {
@@ -160,6 +162,13 @@ public class SelectionFragment extends Fragment {
 	    });
 	    
 	    request.executeAsync();
+	}
+	
+	private void getUserInformation() {
+		List<NameValuePair> content = new ArrayList<NameValuePair>(1);
+		content.add(new BasicNameValuePair("name", User.getName()));
+		String getUserUrl = Constants.USERS_URL + User.getFacebookId();
+		HttpRequesterAsync.postJSONAsync(this, content, getUserUrl);
 	}
 	
 	private void onSessionStateChange(final Session session, SessionState state, Exception exception) {
@@ -185,37 +194,17 @@ public class SelectionFragment extends Fragment {
 		pointsTextView.setText(pointsStr);
 	}
 
-	private class GetUserInformation extends AsyncTask<String, String, String> {
-
-		protected String doInBackground(String... arg0) {
-
-			List<NameValuePair> content = new ArrayList<NameValuePair>(1);
-			content.add(new BasicNameValuePair("name", User.getName()));
-			String getUserUrl = Constants.USERS_URL + User.getFacebookId();
-			
-			String result = HttpRequester.PostJSON(getUserUrl, content);
-			return result;
-
+	@Override
+	public void parseJSON(String json, int requestCode) {
+		// parse user information
+		try {
+			JSONObject responseBody = new JSONObject(json);
+			User.setId(responseBody.getString("_id"));
+			User.setPoints(responseBody.getInt("points"));
+			updateLayout();
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
-
-		protected void onPostExecute(String result) {
-
-			try {
-
-				JSONObject responseBody = new JSONObject(result);
-				User.setId(responseBody.getString("_id"));
-				User.setPoints(responseBody.getInt("points"));
-				updateLayout();
-			} catch (JSONException e) {
-
-				e.printStackTrace();
-
-			}
-
-		}
-
-		
-
 	}
 	
 }

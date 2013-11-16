@@ -27,14 +27,18 @@ import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.stringbitking.noidea.models.Suggestion;
 import com.stringbitking.noidea.models.User;
 import com.stringbitking.noidea.network.HttpRequester;
+import com.stringbitking.noidea.network.HttpRequesterAsync;
+import com.stringbitking.noidea.network.IJSONHandler;
 
-public class SuggestionViewPager extends FragmentActivity {
+public class SuggestionViewPager extends FragmentActivity implements
+		IJSONHandler {
+
+	private static final int FLAG_REQUEST_CODE = 1;
+	private static final int FAVOURITE_REQUEST_CODE = 2;
 
 	private ViewPager theViewPager;
-	private int currentPosition;
 	private Suggestion currentSuggestion;
 	private ArrayList<Suggestion> suggestionsList;
-	private Boolean isFavourite;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
@@ -104,15 +108,10 @@ public class SuggestionViewPager extends FragmentActivity {
 		// Set the current position of the match in setCurrentItem
 
 		for (int i = 0; i < suggestionsList.size(); i++) {
-
 			if (suggestionsList.get(i).getId().equals(suggestionId)) {
-
 				theViewPager.setCurrentItem(i);
-				currentPosition = i;
 				break;
-
 			}
-
 		}
 
 		theViewPager
@@ -120,11 +119,7 @@ public class SuggestionViewPager extends FragmentActivity {
 
 					@Override
 					public void onPageSelected(int position) {
-
 						setTitle("Suggestion #" + position);
-						currentPosition = position;
-						// new CheckFavouriteAsync().execute();
-
 					}
 
 					@Override
@@ -162,39 +157,26 @@ public class SuggestionViewPager extends FragmentActivity {
 		int position = theViewPager.getCurrentItem();
 		currentSuggestion = CurrentSuggestions.get(this).getSuggestionsList()
 				.get(position);
-		new AddRemoveFavouriteAsync().execute();
+		// new AddRemoveFavouriteAsync().execute();
+		addRemoveFavourite();
 	}
 
-	private class AddRemoveFavouriteAsync extends
-			AsyncTask<String, String, String> {
+	private void addRemoveFavourite() {
+		List<NameValuePair> content = new ArrayList<NameValuePair>(2);
+		content.add(new BasicNameValuePair("suggestionId", currentSuggestion
+				.getId()));
+		content.add(new BasicNameValuePair("facebookId", User.getFacebookId()));
+		String addFavouriteUrl = Constants.ADD_FAVOURITE_URL;
+		String removeFavouriteUrl = Constants.FAVOURITE_URL + "remove";
 
-		protected String doInBackground(String... arg0) {
-
-			List<NameValuePair> content = new ArrayList<NameValuePair>(2);
-			content.add(new BasicNameValuePair("suggestionId",
-					currentSuggestion.getId()));
-			content.add(new BasicNameValuePair("facebookId", User
-					.getFacebookId()));
-			String addFavouriteUrl = Constants.ADD_FAVOURITE_URL;
-			String removeFavouriteUrl = Constants.FAVOURITE_URL + "remove";
-
-			String result;
-			Boolean favBool = currentSuggestion.getIsFavourite();
-			if (favBool) {
-				result = HttpRequester.PostJSON(removeFavouriteUrl, content);
-			} else {
-				result = HttpRequester.PostJSON(addFavouriteUrl, content);
-			}
-
-			return result;
-
+		Boolean favBool = currentSuggestion.getIsFavourite();
+		if (favBool) {
+			HttpRequesterAsync.postJSONAsync(this, content,
+					FAVOURITE_REQUEST_CODE, removeFavouriteUrl);
+		} else {
+			HttpRequesterAsync.postJSONAsync(this, content,
+					FAVOURITE_REQUEST_CODE, addFavouriteUrl);
 		}
-
-		protected void onPostExecute(String result) {
-			toggleIsFavourite();
-			updateFavouriteImage();
-		}
-
 	}
 
 	private void updateFavouriteImage() {
@@ -236,32 +218,19 @@ public class SuggestionViewPager extends FragmentActivity {
 		currentSuggestion = CurrentSuggestions.get(this).getSuggestionsList()
 				.get(position);
 		if (!currentSuggestion.getIsFlagged()) {
-			new FlagSuggestionAsync().execute();
+			flagSuggestion();
 		}
 	}
 
-	private class FlagSuggestionAsync extends AsyncTask<String, String, String> {
-
-		protected String doInBackground(String... arg0) {
-
-			int index = theViewPager.getCurrentItem();
-			currentSuggestion = suggestionsList.get(index);
-			String result;
-			String flagUrl = Constants.SERVER_URL + "flag/"
-					+ currentSuggestion.getId();
-			List<NameValuePair> content = new ArrayList<NameValuePair>();
-			content.add(new BasicNameValuePair("facebookId", User.getFacebookId()));
-			result = HttpRequester.PostJSON(flagUrl, content);
-
-			return result;
-
-		}
-
-		protected void onPostExecute(String result) {
-			toggleIsFlagged();
-			updateFlaggedImage();
-		}
-
+	private void flagSuggestion() {
+		int index = theViewPager.getCurrentItem();
+		currentSuggestion = suggestionsList.get(index);
+		String flagUrl = Constants.SERVER_URL + "flag/"
+				+ currentSuggestion.getId();
+		List<NameValuePair> content = new ArrayList<NameValuePair>();
+		content.add(new BasicNameValuePair("facebookId", User.getFacebookId()));
+		HttpRequesterAsync.postJSONAsync(this, content, FLAG_REQUEST_CODE,
+				flagUrl);
 	}
 
 	private void publishFeedDialog() {
@@ -323,6 +292,19 @@ public class SuggestionViewPager extends FragmentActivity {
 
 		publishFeedDialog();
 
+	}
+
+	@Override
+	public void parseJSON(String json, int requestCode) {
+		if (requestCode == FLAG_REQUEST_CODE) {
+			toggleIsFlagged();
+			updateFlaggedImage();
+		}
+
+		if (requestCode == FAVOURITE_REQUEST_CODE) {
+			toggleIsFavourite();
+			updateFavouriteImage();
+		}
 	}
 
 }
