@@ -34,5 +34,6 @@
 	<string name="take_a_picture_button">Снимай</string>
 	<string name="load_image_button">Зареди от галерията</string>
 	<string name="logout_button">Изход</string>
+	<string name="browse_suggestions_button">Търси Предложения</string>
 
 </resources>

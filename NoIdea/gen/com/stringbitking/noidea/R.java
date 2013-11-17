@@ -406,6 +406,7 @@ containing a value of this type.
         public static final int app_name=0x7f070019;
         public static final int app_question_end=0x7f070020;
         public static final int app_question_start=0x7f07001d;
+        public static final int browse_suggestions_button=0x7f07003a;
         public static final int category_label=0x7f070031;
         public static final int com_facebook_choose_friends=0x7f07000f;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f070000;

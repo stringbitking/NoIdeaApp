@@ -39,9 +39,6 @@ public class FavouritesListActivity extends FragmentActivityBuilder {
 		MenuInflater menuInflater = getMenuInflater();
 		menuInflater.inflate(R.menu.main, menu);
 
-		// Calling super after populating the menu is necessary here to ensure
-		// that the
-		// action bar helpers have a chance to handle this event.
 		return super.onCreateOptionsMenu(menu);
 	}
 

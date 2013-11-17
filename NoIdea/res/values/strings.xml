@@ -35,5 +35,6 @@
 	<string name="take_a_picture_button">Take a picture</string>
 	<string name="load_image_button">Load image from gallery</string>
 	<string name="logout_button">Logout</string>
+	<string name="browse_suggestions_button">Browse Suggestions</string>
 
 </resources>
