@@ -122,11 +122,6 @@ public class ActionBarHelperBase extends ActionBarHelper {
         }
     }
 
-    /**
-     * Action bar helper code to be run in {@link Activity#onCreateOptionsMenu(android.view.Menu)}.
-     *
-     * NOTE: This code will mark on-screen menu items as invisible.
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Hides on-screen action items from the options menu.
@@ -145,28 +140,14 @@ public class ActionBarHelperBase extends ActionBarHelper {
         }
     }
 
-    /**
-     * Returns a {@link android.view.MenuInflater} that can read action bar metadata on
-     * pre-Honeycomb devices.
-     */
     public MenuInflater getMenuInflater(MenuInflater superMenuInflater) {
         return new WrappedMenuInflater(mActivity, superMenuInflater);
     }
 
-    /**
-     * Returns the {@link android.view.ViewGroup} for the action bar on phones (compatibility action
-     * bar). Can return null, and will return null on Honeycomb.
-     */
     private ViewGroup getActionBarCompat() {
         return (ViewGroup) mActivity.findViewById(R.id.actionbar_compat);
     }
 
-    /**
-     * Adds an action button to the compatibility action bar, using menu information from a {@link
-     * android.view.MenuItem}. If the menu item ID is <code>menu_refresh</code>, the menu item's
-     * state can be changed to show a loading spinner using
-     * {@link com.example.android.actionbarcompat.ActionBarHelperBase#setRefreshActionItemState(boolean)}.
-     */
     private View addActionItemCompatFromMenuItem(final MenuItem item) {
         final int itemId = item.getItemId();
 

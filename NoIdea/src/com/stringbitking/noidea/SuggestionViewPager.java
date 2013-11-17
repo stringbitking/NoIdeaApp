@@ -213,15 +213,13 @@ public class SuggestionViewPager extends FragmentActivity implements
 		currentSuggestion = suggestionsList.get(index);
 		String title = currentSuggestion.getTitle();
 		String description = currentSuggestion.getDescription();
-		// String imageUrl = Constants.SERVER_URL + "images/" +
-		// currentSuggestion.getImage();
-		String imageUrl = "http://stringbitking.hostbg.net/wp-content/uploads/2013/03/ClassDiagram.png";
+		 String imageUrl = Constants.SERVER_URL + "images/" +
+		 currentSuggestion.getImage();
+		//String imageUrl = "http://stringbitking.hostbg.net/wp-content/uploads/2013/03/ClassDiagram.png";
 		params.putString("name", title);
 		params.putString("caption", "Lets watch.");
 		params.putString("description", description);
 		params.putString("link", "https://developers.facebook.com/android");
-		// params.putString("picture",
-		// "https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png");
 		params.putString("picture", imageUrl);
 
 		WebDialog feedDialog = (new WebDialog.FeedDialogBuilder(this,
@@ -239,6 +237,7 @@ public class SuggestionViewPager extends FragmentActivity implements
 								Toast.makeText(getApplicationContext(),
 										"Posted story, id: " + postId,
 										Toast.LENGTH_SHORT).show();
+								addUserPoints(50);
 							} else {
 								// User clicked the Cancel button
 								Toast.makeText(getApplicationContext(),
@@ -260,6 +259,13 @@ public class SuggestionViewPager extends FragmentActivity implements
 
 				}).build();
 		feedDialog.show();
+	}
+	
+	private void addUserPoints(int points) {
+		List<NameValuePair> content = new ArrayList<NameValuePair>();
+		content.add(new BasicNameValuePair("points", Integer.toString(points)));
+		String url = Constants.USERS_URL + "points/" + User.getFacebookId();
+		HttpRequesterAsync.postJSONAsync(this, content, url);
 	}
 
 	public void onClickShareSomething(View view) {

@@ -25,5 +25,14 @@
 	<string name="points_str">" точки"</string>
 	<string name="rank_label">"Нуждаеш се от "</string>
 	<string name="rank_label_end">" точки за следващия ранг."</string>
+	<string name="category_label">Категория</string>
+	<string name="description_label">Описание</string>
+	<string name="description_hint">Въведи описание</string>
+	<string name="create_suggestion_button">Създай предложение</string>
+	<string name="title_label">Заглавие</string>
+	<string name="title_hint">Въведи заглавие</string>
+	<string name="take_a_picture_button">Снимай</string>
+	<string name="load_image_button">Зареди от галерията</string>
+	<string name="logout_button">Изход</string>
 
 </resources>

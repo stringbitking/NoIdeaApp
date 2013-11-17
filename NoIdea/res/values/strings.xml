@@ -10,7 +10,7 @@
     <string name="fragment_suggestion_list_title">Suggestions List</string>
     <string name="app_question_end">now?</string>
     <string name="title_activity_post_suggestion">Create Suggestion</string>
-    <string name="title_activity_login">Home</string>
+    <string name="title_activity_login">NoIdea</string>
     
     <string name="menu_home">Home</string>
 	<string name="menu_search">Search</string>
@@ -26,5 +26,14 @@
 	<string name="zero">0</string>
 	<string name="rank_label">"You need "</string>
 	<string name="rank_label_end">" points for the next rank."</string>
+	<string name="category_label">Category</string>
+	<string name="description_label">Description</string>
+	<string name="description_hint">Enter Description</string>
+	<string name="create_suggestion_button">Create Suggestion</string>
+	<string name="title_label">Title</string>
+	<string name="title_hint">Enter Title</string>
+	<string name="take_a_picture_button">Take a picture</string>
+	<string name="load_image_button">Load image from gallery</string>
+	<string name="logout_button">Logout</string>
 
 </resources>

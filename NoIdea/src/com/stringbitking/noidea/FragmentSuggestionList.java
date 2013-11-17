@@ -61,7 +61,6 @@ public class FragmentSuggestionList extends ListFragment implements IJSONHandler
 					SearchActivity.MAX_RATING);
 		}
 
-		// Setting up the adapter after executing the async operation
 		getSuggestions(option);
 	}
 
@@ -134,10 +133,6 @@ public class FragmentSuggestionList extends ListFragment implements IJSONHandler
 					.findViewById(R.id.suggestionImageView);
 			suggestionImageView
 					.setImageDrawable(suggestionImages.get(position));
-
-			TextView suggestionAuthorTextView = (TextView) convertView
-					.findViewById(R.id.suggestionAuthorTextView);
-			suggestionAuthorTextView.setText(theSuggestion.getAuthor());
 
 			// Return the finished list item for display
 

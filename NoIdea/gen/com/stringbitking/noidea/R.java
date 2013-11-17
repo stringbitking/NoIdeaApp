@@ -277,10 +277,11 @@ containing a value of this type.
         public static final int white_heart=0x7f02003b;
     }
     public static final class id {
+        public static final int LinearLayout1=0x7f040042;
         public static final int TableLayout1=0x7f04000c;
-        public static final int TableLayout2=0x7f040042;
-        public static final int TableLayout3=0x7f040043;
-        public static final int action_settings=0x7f040056;
+        public static final int TableLayout2=0x7f040043;
+        public static final int TableLayout3=0x7f040044;
+        public static final int action_settings=0x7f040055;
         public static final int actionbar_compat=0x7f040004;
         public static final int actionbar_compat_item_refresh=0x7f040007;
         public static final int actionbar_compat_item_refresh_progress=0x7f040006;
@@ -319,14 +320,14 @@ containing a value of this type.
         public static final int indicatorRatingBar=0x7f04003d;
         public static final int large=0x7f040002;
         public static final int loadImageButton=0x7f04001c;
-        public static final int login_button=0x7f040055;
+        public static final int login_button=0x7f040054;
         public static final int logoutButton=0x7f040053;
         public static final int maxRatingBar=0x7f040018;
-        public static final int menu_favourite=0x7f04005a;
-        public static final int menu_home=0x7f040057;
-        public static final int menu_new=0x7f040059;
+        public static final int menu_favourite=0x7f040059;
+        public static final int menu_home=0x7f040056;
+        public static final int menu_new=0x7f040058;
         public static final int menu_refresh=0x7f040008;
-        public static final int menu_search=0x7f040058;
+        public static final int menu_search=0x7f040057;
         public static final int minRatingBar=0x7f040015;
         public static final int normal=0x7f040001;
         public static final int picker_subtitle=0x7f040033;
@@ -347,11 +348,9 @@ containing a value of this type.
         public static final int shareImageView=0x7f040040;
         public static final int small=0x7f040000;
         public static final int splashFragment=0x7f04000a;
-        public static final int splash_icon=0x7f040054;
-        public static final int suggestionAuthorTextView=0x7f040045;
         public static final int suggestionDescriptionTextView=0x7f040046;
         public static final int suggestionImageView=0x7f04001b;
-        public static final int suggestionTitleTextView=0x7f040044;
+        public static final int suggestionTitleTextView=0x7f040045;
         public static final int tableRow0=0x7f040039;
         public static final int tableRow1=0x7f04000d;
         public static final int tableRow2=0x7f04000f;
@@ -407,6 +406,7 @@ containing a value of this type.
         public static final int app_name=0x7f070019;
         public static final int app_question_end=0x7f070020;
         public static final int app_question_start=0x7f07001d;
+        public static final int category_label=0x7f070031;
         public static final int com_facebook_choose_friends=0x7f07000f;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f070000;
         public static final int com_facebook_internet_permission_error_message=0x7f070013;
@@ -432,9 +432,14 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_log_in_button=0x7f070008;
         public static final int com_facebook_usersettingsfragment_logged_in=0x7f070009;
         public static final int com_facebook_usersettingsfragment_not_logged_in=0x7f07000a;
+        public static final int create_suggestion_button=0x7f070034;
+        public static final int description_hint=0x7f070033;
+        public static final int description_label=0x7f070032;
         public static final int fav_image_description=0x7f070029;
         public static final int flag_image_description=0x7f07002b;
         public static final int fragment_suggestion_list_title=0x7f07001f;
+        public static final int load_image_button=0x7f070038;
+        public static final int logout_button=0x7f070039;
         public static final int menu_favourite=0x7f070026;
         public static final int menu_home=0x7f070023;
         public static final int menu_new=0x7f070025;
@@ -446,9 +451,12 @@ containing a value of this type.
         public static final int rateButton=0x7f070027;
         public static final int share_image_description=0x7f07002a;
         public static final int suggestion_image_description=0x7f070028;
+        public static final int take_a_picture_button=0x7f070037;
         public static final int tell_me_button=0x7f07001e;
         public static final int title_activity_login=0x7f070022;
         public static final int title_activity_post_suggestion=0x7f070021;
+        public static final int title_hint=0x7f070036;
+        public static final int title_label=0x7f070035;
         public static final int zero=0x7f07002e;
     }
     public static final class style {

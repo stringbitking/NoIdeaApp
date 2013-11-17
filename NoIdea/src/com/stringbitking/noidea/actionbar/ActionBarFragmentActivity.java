@@ -1,6 +1,5 @@
 package com.stringbitking.noidea.actionbar;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -37,12 +36,6 @@ public class ActionBarFragmentActivity extends FragmentActivity {
         mActionBarHelper.onPostCreate(savedInstanceState);
     }
 
-    /**
-     * Base action bar-aware implementation for
-     * {@link Activity#onCreateOptionsMenu(android.view.Menu)}.
-     *
-     * Note: marking menu items as invisible/visible is not currently supported.
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean retValue = false;
