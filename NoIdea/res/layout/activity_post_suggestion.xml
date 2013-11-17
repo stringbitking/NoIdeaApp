@@ -9,11 +9,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".PostSuggestionActivity" >
 
-    <TableRow
-        android:id="@+id/tableRow0"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
+    <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="2" >
 
         <LinearLayout
             android:layout_width="0dp"
@@ -51,12 +50,12 @@
                 android:onClick="onClickChangePicture"
                 android:text="Take a picture" />
         </LinearLayout>
-    </TableRow>
+   </LinearLayout>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="15"
+        android:layout_weight="5"
         android:orientation="vertical" >
 
         <TableRow
@@ -102,6 +101,7 @@
                 android:layout_weight="2"
                 android:ems="10"
                 android:hint="Enter Description"
+                android:maxLines="3"
                 android:inputType="textMultiLine" >
             </EditText>
         </TableRow>
